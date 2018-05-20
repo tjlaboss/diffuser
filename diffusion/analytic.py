@@ -77,7 +77,24 @@ class AnalyticProblem1D(object):
 
 
 class AnalyticSlab1D(AnalyticProblem1D):
-
+	"""A one-dimensional Cartesian slab with a homogeneous medium
+	
+	Parameters:
+	-----------
+	fill:       Material; the homogeneous medium
+	width:      float, cm, optional; the slab width.
+	            Leave it as `None` for an infinite slab.
+	            [Default: None]
+	
+	Attributes:
+	-----------
+	bg2:        float; geometric buckling (exactly 0 if infinite)
+	ngroups:    int; number of energy groups
+	if ngroups == 2:
+		mag1:   float; relative magnitude of fast flux
+		mag2:   float; relative magnitude of thermal flux
+		ratio:  float; ratio of mag1/mag2
+	"""
 	def geometric_buckling(self):
 		if self.width is None:
 			# infinite
@@ -85,6 +102,17 @@ class AnalyticSlab1D(AnalyticProblem1D):
 		return (scipy.pi/self.width)**2
 	
 	def flux(self, x, g=None):
+		"""Find the groupwise scalar flux somewhere on the slab
+		
+		Parameters:
+		-----------
+		x:          float, cm; x-coordinate to find the flux at
+		g:          int, optional for 1-group; which energy group's flux
+		
+		Returns:
+		--------
+		float; normalized scalar flux at x
+		"""
 		res = super().flux(x, g)
 		if res is not None:
 			return res

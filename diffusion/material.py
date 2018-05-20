@@ -6,6 +6,29 @@ import scipy
 
 
 class Material(object):
+	"""A multigroup material for neutron diffusion 
+	
+	Be sure to set all of the cross sections. You can check this by running
+	`Material.check_cross_sections()`, which will raise an error if any
+	are zero that cannot be. nuSigmaF is allowed to be zero.
+	
+	Parameters:
+	-----------
+	ngroups:        int; number of energy groups to use
+	name:           str, optional
+	
+	Attributes:
+	-----------
+	d:              array(ngroups,1), float, cm; diffusion coefficient
+	sigma_a:        array(ngroups,1), float, cm^-1; macroscopic absorption xs
+	nu_sigma_f:     array(ngroups,1), float, cm^-1; macroscopic nu-fission xs
+	scatter_matrix: array(ngroups,ngroups), float, cm^-1; scattering matrix
+	is_fissionable: Boolean; whether there is any nu-fission cross section
+	
+	Only in 2-group:
+	----------------
+	sigma_s12:      float; corrected downscatter cross section
+	"""
 	def __init__(self, ngroups, name=""):
 		self.ngroups = ngroups
 		self.name = name
@@ -78,15 +101,43 @@ Material: {}
 	def nu_sigma_f(self, nu_sigma_f):
 		self._nu_sigma_f[:] = nu_sigma_f
 		self._is_fissionable = bool(self._nu_sigma_f.any())
-
+	
+	def check_cross_sections(self):
+		assert self.d.any(), "Diffusion coefficient must be set."
+		assert self.sigma_a.any(), "Absorption XS must be set."
+		assert self.scatter_matrix.any(), "Scatter matrix must be set."
+	
 	def flux_ratio(self, bg2=0.0):
+		"""Find the fast-to-thermal flux ratio in a homogenous material
+		
+		Parameter:
+		----------
+		bg2:        float, optional; geometric buckling
+					[Default: 0.0]
+		
+		Returns:
+		--------
+		float; fast-to-thermal flux ratio
+		"""
 		assert self.ngroups == 2
 		return self.sigma_s12/(self.d[1]*bg2 + self.sigma_a[1])
 
 	def get_kinf(self):
+		"""Wrapper for get_keff() for an infinite medium"""
 		return self.get_keff(bg2=0.0)
 
 	def get_keff(self, bg2):
+		"""Find the eigenvalue in a homogenous material
+
+		Parameter:
+		----------
+		bg2:        float, optional; geometric buckling
+					[Default: 0.0]
+
+		Returns:
+		--------
+		keff:       float; the multiplication factor/eigenvalue
+		"""
 		if not self.is_fissionable:
 			return 0.0
 		elif self.ngroups == 1:

@@ -18,11 +18,9 @@ class Node1D(object):
 		self.dx = dx
 	
 	def _check_fill(self, fill):
-		assert fill.ngroups == self._ngroups, \
+		assert self.ngroups == self._ngroups, \
 			"node fill has an inconsistent number of energy groups."
-		assert fill.d.any(), "Diffusion coefficient must be set."
-		assert fill.sigma_a.any(), "Absorption XS must be set."
-		assert fill.scatter_matrix.any(), "Scatter matrix must be set."
+		fill.check_cross_sections()
 	
 	@property
 	def G(self):
