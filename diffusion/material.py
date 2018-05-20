@@ -71,12 +71,13 @@ Material: {}
 	def scatter_matrix(self, scatter_matrix):
 		self._scatter_matrix[:, :] = scatter_matrix
 		if self.ngroups == 2:
-			self._sigma_s12 = self.scatter_matrix[1, 0] - self.scatter_matrix[0, 1]
+			self._sigma_s12 = self.scatter_matrix[1, 0] - \
+			                  self.scatter_matrix[0, 1]
 
 	@nu_sigma_f.setter
 	def nu_sigma_f(self, nu_sigma_f):
-		self._nu_sigma_f = nu_sigma_f
-		self._is_fissionable = bool(nu_sigma_f.sum())
+		self._nu_sigma_f[:] = nu_sigma_f
+		self._is_fissionable = bool(self._nu_sigma_f.any())
 
 	def flux_ratio(self, bg2=0.0):
 		assert self.ngroups == 2
@@ -91,7 +92,7 @@ Material: {}
 		elif self.ngroups == 1:
 			return scipy.float64(self.nu_sigma_f/(self.sigma_a + self.d*bg2))
 		elif self.ngroups == 2:
-			ratio = self.flux_ratio()
+			ratio = self.flux_ratio(bg2)
 			r1 = self.sigma_a[0] + self.sigma_s12
 			return (self.nu_sigma_f[0] + self.nu_sigma_f[1]*ratio)/ \
 			       (self.d[0]*bg2 + r1)
