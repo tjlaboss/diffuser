@@ -16,6 +16,8 @@ class Node1D(object):
 		self._check_fill(fill)
 		self.fill = fill
 		self.dx = dx
+		self.fission_source = self.nuSigmaF*self.dx
+		self.scatter_source = self.scatterMatrix*self.dx
 	
 	def _check_fill(self, fill):
 		assert fill.ngroups == self._ngroups, \
@@ -73,8 +75,9 @@ class Node1D(object):
 		dhat_right = self.get_Dhat(right)
 		a[2] = -dhat_right
 		a[1] = dhat_left + self.sigmaR*self.dx + dhat_right
-		b = self.nuSigmaF*self.dx
-		return a, b
+		b = self.fission_source
+		t = self.scatter_source
+		return a, b, t
 	
 	def get_vacuum_boundary_equation(self, adjacent):
 		"""Get the matrix entries for a vacuum (zero-incoming) boundary
@@ -95,8 +98,9 @@ class Node1D(object):
 		a[0] = dhat
 		leakage = (2*self.D/self.dx)/(1 + 4*self.D/self.dx)
 		a[1] =  dhat + self.sigmaR*self.dx + leakage
-		b = self.nuSigmaF*self.dx
-		return a, b
+		b = self.fission_source
+		t = self.scatter_source
+		return a, b, t
 	
 	def get_reflective_boundary_condition(self, adjacent):
 		"""Get the matrix entries for a reflective (zero-current) boundary
@@ -118,5 +122,6 @@ class Node1D(object):
 		d2 = 2*self.D/self.dx
 		a[0] = -d2
 		a[1] = d2 + self.sigmaR*self.dx
-		b = self.nuSigmaF*self.dx
-		return a, b
+		b = self.fission_source
+		t = self.scatter_source
+		return a, b, t
