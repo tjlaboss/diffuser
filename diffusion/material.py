@@ -5,6 +5,12 @@
 import scipy
 
 
+def get_off_diagonal(matrix):
+	off_diag = scipy.array(matrix, dtype=matrix.dtype)
+	off_diag[scipy.diag_indices_from(matrix)] = 0
+	return off_diag
+
+
 class Material(object):
 	"""A multigroup material for neutron diffusion 
 	
@@ -35,6 +41,7 @@ class Material(object):
 
 		self._d = scipy.zeros(ngroups)
 		self._sigma_a = scipy.zeros(ngroups)
+		self._sigma_r = scipy.zeros(ngroups)
 		self._scatter_matrix = scipy.zeros((ngroups, ngroups))
 		self._nu_sigma_f = scipy.zeros(ngroups)
 
@@ -73,6 +80,10 @@ Material: {}
 				raise ValueError(errstr)
 			else:
 				raise SystemError("Unknown error.")
+	
+	@property
+	def sigma_r(self):
+		return self._sigma_r
 
 	@property
 	def nu_sigma_f(self):
@@ -88,12 +99,16 @@ Material: {}
 
 	@sigma_a.setter
 	def sigma_a(self, sigma_a):
+		self._sigma_r += sigma_a - self.sigma_a
 		self._sigma_a = sigma_a
 
 	@scatter_matrix.setter
 	def scatter_matrix(self, scatter_matrix):
 		self._scatter_matrix[:, :] = scatter_matrix
 		if self.ngroups == 2:
+			old_r = get_off_diagonal(scatter_matrix).sum(axis=0)
+			new_r = get_off_diagonal(scatter_matrix).sum(axis=0)
+			self._sigma_r += new_r - old_r
 			self._sigma_s12 = self.scatter_matrix[1, 0] - \
 			                  self.scatter_matrix[0, 1]
 
