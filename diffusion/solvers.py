@@ -7,7 +7,7 @@
 
 import scipy
 import scipy.linalg as la
-from matrix_functions import gauss_seidel, l2norm_1d
+from .matrix_functions import gauss_seidel, l2norm_1d
 
 MAX_INNER = 500
 MAX_OUTER = 1000

@@ -3,7 +3,7 @@
 # Class for multigroup diffusion material
 
 import scipy
-from functions import get_off_diagonal
+from .matrix_functions import get_off_diagonal
 
 
 class Material(object):

@@ -138,3 +138,11 @@ def l2norm_1d(new, old):
 			diff += ((n - old[i])/n)**2
 	norm = scipy.sqrt(diff/nx)
 	return norm
+
+
+def get_off_diagonal(matrix):
+	"""Return only the off-diagnoal terms of a square matrix."""
+	off_diag = scipy.array(matrix, dtype=matrix.dtype)
+	off_diag[scipy.diag_indices_from(matrix)] = 0
+	return off_diag
+
