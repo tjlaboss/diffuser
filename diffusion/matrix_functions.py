@@ -80,3 +80,55 @@ def populate_matrices(node_list, ngroups, bc_left, bc_right):
 	return matrixA, matrixB
 
 
+def gauss_seidel(L, U, s, x, k):
+	"""A Gauss-Seidel iterative solver
+
+	Inputs:
+		L:	array; inverse of (lower-triangular square matrix, contains the diagonal)
+		U:	aray; upper-triangular square matrix
+		b:	array; vector of the same length as L and U
+		x:	array; solution vector of last iteration
+		k:  float; eigenvalue from the last iteration
+
+	Outputs:
+		x:	array; solution vector
+	"""
+	n = len(x) - 1
+	m = int(len(x)/2)
+	
+	# More efficient calculation. Write this and compare the two
+	# We know that [A] is tridiagonal
+	
+	# Leftmost
+	x[0] = (s[0]/k - U[0, 1]*x[1]) / L[0, 0]
+	# Interior
+	for i in range(1, m):
+		x[i] = (s[i]/k - L[i, i-1]*x[i-1] - U[i, i+1]*x[i+1]) / L[i, i]
+	for i in range(m, n):
+		x[i] = (s[i]/k - L[i, i-1]*x[i-1] - U[i, i+1]*x[i+1] -
+		        L[i, i-m]*x[i-m]) / L[i, i]
+	# Rightmost
+	x[n] = (s[n]/k - L[n, n-1]*x[n-1] - L[n, n-m]*x[n-m]) / L[n, n]
+	return x
+
+
+def l2norm_1d(new, old):
+	"""Compare the L2 engineering norms of two 1-dimentional arrays
+
+	Parameters:
+	-----------
+	new:        array of the latest values
+	old:        array of the reference values.
+	            Must be the same shape as `new'.
+
+	Returns:
+	--------
+	norm:       float; the L2 norm of the arrays
+	"""
+	diff = 0
+	nx = len(new)
+	for i, n in enumerate(new):
+		if n:
+			diff += ((n - old[i])/n)**2
+	norm = scipy.sqrt(diff/nx)
+	return norm
