@@ -80,35 +80,41 @@ def populate_matrices(node_list, ngroups, bc_left, bc_right):
 	return matrixA, matrixB
 
 
-def gauss_seidel(L, U, s, x, k):
+def gauss_seidel(L, U, S, x, k):
 	"""A Gauss-Seidel iterative solver
+	
+	Theoretically, this is a more efficient solution
+	because we only do math on the matrix elements that
+	we know contain the right solution, and x is updated as we go.
+	
+	In practice, this is slower than scipy'S builtin matrix solution methods
+	(including inversion) because they use C or Fortran libraries.
 
-	Inputs:
-		L:	array; inverse of (lower-triangular square matrix, contains the diagonal)
-		U:	aray; upper-triangular square matrix
-		b:	array; vector of the same length as L and U
-		x:	array; solution vector of last iteration
-		k:  float; eigenvalue from the last iteration
+	Parameters:
+	-----------
+	L:	array; lower-triangular square matrix, containing the diagonal
+	U:	array; upper-triangular square matrix, only off-diagnal terms
+	S:	array; source vector
+	x:	array; flux vector of last iteration
+	k:  float; eigenvalue from the last iteration
 
-	Outputs:
-		x:	array; solution vector
+	Returns:
+	--------
+	x:	array; solution vector
 	"""
 	n = len(x) - 1
-	m = int(len(x)/2)
-	
-	# More efficient calculation. Write this and compare the two
-	# We know that [A] is tridiagonal
+	m = len(x)//2
 	
 	# Leftmost
-	x[0] = (s[0]/k - U[0, 1]*x[1]) / L[0, 0]
+	x[0] = (S[0]/k - U[0, 1]*x[1])/L[0, 0]
 	# Interior
 	for i in range(1, m):
-		x[i] = (s[i]/k - L[i, i-1]*x[i-1] - U[i, i+1]*x[i+1]) / L[i, i]
+		x[i] = (S[i]/k - L[i, i - 1]*x[i - 1] - U[i, i + 1]*x[i + 1])/L[i, i]
 	for i in range(m, n):
-		x[i] = (s[i]/k - L[i, i-1]*x[i-1] - U[i, i+1]*x[i+1] -
-		        L[i, i-m]*x[i-m]) / L[i, i]
+		x[i] = (S[i]/k - L[i, i - 1]*x[i - 1] - U[i, i + 1]*x[i + 1] -
+		        L[i,i-m]*x[i-m]) / L[i,i]
 	# Rightmost
-	x[n] = (s[n]/k - L[n, n-1]*x[n-1] - L[n, n-m]*x[n-m]) / L[n, n]
+	x[n] = (S[n]/k - L[n, n - 1]*x[n - 1] - L[n, n - m]*x[n - m])/L[n, n]
 	return x
 
 
