@@ -99,13 +99,13 @@ Material: {}
 
 	@scatter_matrix.setter
 	def scatter_matrix(self, scatter_matrix):
-		self._scatter_matrix[:, :] = scatter_matrix
 		if self.ngroups == 2:
-			old_r = get_off_diagonal(scatter_matrix).sum(axis=0)
+			old_r = get_off_diagonal(self._scatter_matrix).sum(axis=0)
 			new_r = get_off_diagonal(scatter_matrix).sum(axis=0)
 			self._sigma_r += new_r - old_r
-			self._sigma_s12 = self.scatter_matrix[1, 0] - \
-			                  self.scatter_matrix[0, 1]
+			self._sigma_s12 = scatter_matrix[1, 0] - \
+			                  scatter_matrix[0, 1]
+		self._scatter_matrix = scatter_matrix
 
 	@nu_sigma_f.setter
 	def nu_sigma_f(self, nu_sigma_f):
@@ -130,7 +130,7 @@ Material: {}
 		float; fast-to-thermal flux ratio
 		"""
 		assert self.ngroups == 2
-		return self.sigma_s12/(self.d[1]*bg2 + self.sigma_a[1])
+		return (self.d[1]*bg2 + self.sigma_a[1])/self.sigma_s12
 
 	def get_kinf(self):
 		"""Wrapper for get_keff() for an infinite medium"""
@@ -155,7 +155,7 @@ Material: {}
 		elif self.ngroups == 2:
 			ratio = self.flux_ratio(bg2)
 			r1 = self.sigma_a[0] + self.sigma_s12
-			return (self.nu_sigma_f[0] + self.nu_sigma_f[1]*ratio)/ \
+			return (self.nu_sigma_f[0] + self.nu_sigma_f[1]/ratio)/ \
 			       (self.d[0]*bg2 + r1)
 		else:
 			errstr = "k_inf calculation is only available for 1 or 2 groups."
