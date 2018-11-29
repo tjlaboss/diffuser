@@ -105,7 +105,7 @@ Material: {}
 			self._sigma_r += new_r - old_r
 			self._sigma_s12 = scatter_matrix[1, 0] - \
 			                  scatter_matrix[0, 1]
-		self._scatter_matrix = scatter_matrix
+		self._scatter_matrix[:, :] = scatter_matrix
 
 	@nu_sigma_f.setter
 	def nu_sigma_f(self, nu_sigma_f):
@@ -115,7 +115,8 @@ Material: {}
 	def check_cross_sections(self):
 		assert self.d.any(), "Diffusion coefficient must be set."
 		assert self.sigma_a.any(), "Absorption XS must be set."
-		assert self.scatter_matrix.any(), "Scatter matrix must be set."
+		if self.ngroups > 1:
+			assert self.scatter_matrix.any(), "Scatter matrix must be set."
 	
 	def flux_ratio(self, bg2=0.0):
 		"""Find the fast-to-thermal flux ratio in a homogenous material
