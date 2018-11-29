@@ -7,7 +7,7 @@
 
 import scipy
 import scipy.linalg as la
-from .matrix_functions import gauss_seidel, l2norm_1d
+from .matrices import gauss_seidel, l2norm_1d
 
 MAX_INNER = 500
 MAX_OUTER = 1000
@@ -102,6 +102,8 @@ class BaseSolver:
 		s:              array; fission source vector
 		k:              float; eigenvalue
 		"""
+		if not kguess:
+			kguess = 1.0
 		sguess = self.matB.dot(self.xguess)
 		oldx = scipy.array(self.xguess)
 		kdiff = 1 + self.eps_k
