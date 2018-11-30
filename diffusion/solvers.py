@@ -71,7 +71,7 @@ class BaseSolver:
 			f = lambda i: scipy.cos(cx*(nx - i))
 		elif bc_left == 'r' and bc_right == 'r':
 			# Flat
-			f = lambda i: 1
+			f = lambda i: i
 		else:
 			raise NotImplementedError("Looks like I forgot a BC!")
 		fshape = f(fshape)
