@@ -2,8 +2,10 @@
 #
 # Class for a diffusion problem that populates and solves itself
 
+import numpy as np
 from . import node
 from . import matrices
+from . import plotting
 
 
 def _get_boundary_condition(bc_type):
@@ -117,6 +119,14 @@ class Problem1D:
 		# TODO: Make the appropriate plots
 		if plot_level >= 1:
 			print("Flux + Source plots here")
+			power = np.array(source)
+			power[source == 0] = np.NaN
+			power /= np.nanmean(power)
+			print(power)
+			peaking = np.nanmax(power)
+			print(peaking)
+			plotting.flux_and_fission_plot(
+				flux, power, self._node_list, keff, peaking)
 		if plot_level >= 2:
 			print("spy() plots here")
 		if plot_level >= 3:
