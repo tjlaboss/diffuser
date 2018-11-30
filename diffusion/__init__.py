@@ -1,4 +1,5 @@
-from . import material
+from .material import Material
 from . import node
 from . import matrices
-from . import solvers
+from .solvers import InversionSolver, ScipySolver, GaussSeidelSolver
+from .problem import Problem1D
