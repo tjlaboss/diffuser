@@ -65,4 +65,14 @@ def spy_plots(matA, matB):
 	ax2.set_title("[B]\n", fontsize=12)
 	fig.tight_layout()
 	return fig, (ax1, ax2)
-	
+
+
+def l2norm_plot(l2norm_vector):
+	fig = figure()
+	ax = fig.add_subplot(111)
+	ax.semilogy(l2norm_vector)
+	ax.set_xlabel("Outer Iteration")
+	ax.set_ylabel("$L_2$ Engineering Norm")
+	ax.grid()
+	ax.set_xlim(0, len(l2norm_vector))
+	return fig, (ax,)

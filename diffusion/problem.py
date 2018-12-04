@@ -128,7 +128,6 @@ class Problem1D:
 				flux, power, self._node_list, keff, peaking)
 		if plot_level >= 2:
 			plotting.spy_plots(matA, matB)
-		# TODO: Make the appropriate plots
 		if plot_level >= 3:
-			print("L2norm plot here")
+			plotting.l2norm_plot(solver.get_l2norm_results())
 	

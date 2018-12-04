@@ -29,7 +29,14 @@ class BaseSolver:
 		self.eps_source = eps_source
 		self.eps_k = eps_k
 		self.matB = matB
-		
+		self._solved = False
+		self._l2norm = scipy.zeros(MAX_OUTER)
+	
+	def get_l2norm_results(self):
+		if self._solved:
+			return self._l2norm
+		else:
+			raise ValueError("You mut run the solver to get L2norm results.")
 	
 	def guess_flux(self, fuel, nx, bc_left, bc_right):
 		"""Guess the flux vector from one of the materials
@@ -128,6 +135,7 @@ class BaseSolver:
 			# Now the flux is converged at the fission source guess
 			s = self.matB.dot(newx)
 			sdiff = l2norm_1d(s, sguess)
+			self._l2norm[c_outer-1] = sdiff
 			k = kguess*s.sum()/sguess.sum()
 			kdiff = abs(k - kguess)/kguess
 			kguess = k
@@ -137,7 +145,9 @@ class BaseSolver:
 				raise ConvergenceError("Maximum outer iterations reached!")
 		
 		# can add checks here, like fission/absorption k calculation
+		self._solved = True
 		print("Solver converged after {} fission source iterations.".format(c_outer))
+		self._l2norm = self._l2norm[:c_outer]
 
 		return newx, s, k
 
