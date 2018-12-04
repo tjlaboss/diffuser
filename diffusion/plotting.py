@@ -53,3 +53,16 @@ def flux_and_fission_plot(flux_vector, source_vector, node_list,
 	ax2.set_ylim(0, 1.1*peaking)
 	ax2.set_ylabel("Relative fission source")
 	return fig, (ax1, ax2)
+
+
+def spy_plots(matA, matB):
+	fig = figure()
+	ax1 = fig.add_subplot(121)
+	ax1.spy(matA)
+	ax1.set_title("[A]\n", fontsize=12)
+	ax2 = fig.add_subplot(122)
+	ax2.spy(matB)
+	ax2.set_title("[B]\n", fontsize=12)
+	fig.tight_layout()
+	return fig, (ax1, ax2)
+	

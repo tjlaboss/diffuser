@@ -126,9 +126,9 @@ class Problem1D:
 			print("\tpeaking = {:6.4f}".format(peaking))
 			plotting.flux_and_fission_plot(
 				flux, power, self._node_list, keff, peaking)
-		# TODO: Make the appropriate plots
 		if plot_level >= 2:
-			print("spy() plots here")
+			plotting.spy_plots(matA, matB)
+		# TODO: Make the appropriate plots
 		if plot_level >= 3:
 			print("L2norm plot here")
 	
