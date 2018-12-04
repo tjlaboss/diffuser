@@ -115,18 +115,18 @@ class Problem1D:
 				kguess = self.fuel.get_kinf()
 		# Do the computation
 		flux, source, keff = solver.solve_eigenvalue(kguess)
-		print("\tk_eff = {:.5f}".format(keff))
-		# TODO: Make the appropriate plots
+		print("\tk_eff   = {:7.5f}".format(keff))
 		if plot_level >= 1:
-			print("Flux + Source plots here")
 			power = np.array(source)
-			power[source == 0] = np.NaN
+			power.shape = (self._ngroups, self.num_nodes)
+			power = power.sum(axis=0)
+			power[power == 0] = np.NaN
 			power /= np.nanmean(power)
-			print(power)
 			peaking = np.nanmax(power)
-			print(peaking)
+			print("\tpeaking = {:6.4f}".format(peaking))
 			plotting.flux_and_fission_plot(
 				flux, power, self._node_list, keff, peaking)
+		# TODO: Make the appropriate plots
 		if plot_level >= 2:
 			print("spy() plots here")
 		if plot_level >= 3:

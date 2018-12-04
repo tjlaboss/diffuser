@@ -11,6 +11,9 @@ def flux_and_fission_plot(flux_vector, source_vector, node_list,
 	ax1 = fig.add_subplot(111)
 	nx = len(node_list)
 	xvals = np.cumsum([node.dx for node in node_list])
+	#ax1.set_xticks([0] + list(xvals))
+	for i, node in enumerate(node_list):
+		xvals[i] -= node.dx / 2.0
 	ngroups = len(flux_vector) // nx
 	lines = []
 	# Flux plots
@@ -25,28 +28,27 @@ def flux_and_fission_plot(flux_vector, source_vector, node_list,
 		lines += l1 + l2
 	else:
 		raise NotImplementedError("{} groups".format(ngroups))
-	ax1.set_xticks([0] + list(xvals))
 	ax1.set_xlabel("$x$ (cm)", fontsize=11)
 	ax1.set_ylabel("$\phi(x)$", fontsize=11)
 	# Power distribution plot
 	ax2 = ax1.twinx()
 	if peaking is None:
 		peaking = nanmax(source_vector) / nanmean(source_vector)
-	rel_power = array(source_vector)
-	rel_power[rel_power == 0] = NaN
-	rel_power /= nanmean(rel_power)
-	peaking = rel_power.max()
-	lf = ax2.plot(xvals, rel_power, "-", color="gold", label="Fission Source")
+	lf = ax2.plot(xvals, source_vector, "-", color="gold", label="Fission Source")
 	lines += lf
 	labels = [l.get_label() for l in lines]
 	ax1.legend(lines, labels)
 	ax1.grid()
-	# TODO add a short line at the top and label to show the peaking
-	print("Also include peaking:", peaking)
-	# TODO add text to show keff
+	if peaking - 1 > 1E-5:
+		imax = np.argmax(source_vector)
+		xplot = xvals[imax]
+		hwidth = xvals[-1] / 10.0
+		ax2.plot([xplot - hwidth, xplot + hwidth], [peaking, peaking],
+		         '-', color="gray")
+		ptext = "peaking = {:5.4}".format(peaking)
+		ax2.text(xplot, peaking, ptext, ha="center", va="bottom")
 	if keff:
-		print("Also include keff")
-		ktext = "$k_{eff} = " + "{:.5}".format(keff) + "$"
+		ktext = "$k_{eff} = " + "{:7.5}".format(keff) + "$"
 		ax2.text(0, peaking, ktext)
 	ax2.set_ylim(0, 1.1*peaking)
 	ax2.set_ylabel("Relative fission source")
