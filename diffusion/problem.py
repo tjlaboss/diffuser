@@ -120,6 +120,7 @@ class Problem1D:
 			power = np.array(source)
 			power.shape = (self._ngroups, self.num_nodes)
 			power = power.sum(axis=0)
+			power /= np.array([n.dx for n in self._node_list])
 			power[power == 0] = np.NaN
 			power /= np.nanmean(power)
 			peaking = np.nanmax(power)

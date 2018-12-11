@@ -14,6 +14,7 @@ def flux_and_fission_plot(flux_vector, source_vector, node_list,
 	#ax1.set_xticks([0] + list(xvals))
 	for i, node in enumerate(node_list):
 		xvals[i] -= node.dx / 2.0
+	xmax = xvals[-1]
 	ngroups = len(flux_vector) // nx
 	lines = []
 	# Flux plots
@@ -33,23 +34,24 @@ def flux_and_fission_plot(flux_vector, source_vector, node_list,
 	# Power distribution plot
 	ax2 = ax1.twinx()
 	if peaking is None:
-		peaking = nanmax(source_vector) / nanmean(source_vector)
+		peaking = nanmax(source_vector)
 	lf = ax2.plot(xvals, source_vector, "-", color="gold", label="Fission Source")
 	lines += lf
 	labels = [l.get_label() for l in lines]
 	ax1.legend(lines, labels)
 	ax1.grid()
 	if peaking - 1 > 1E-5:
-		imax = np.argmax(source_vector)
+		imax = np.nanargmax(source_vector[::-1])  # Get the last peak.
 		xplot = xvals[imax]
-		hwidth = xvals[-1] / 10.0
+		hwidth = xmax / 10.0
 		ax2.plot([xplot - hwidth, xplot + hwidth], [peaking, peaking],
 		         '-', color="gray")
-		ptext = "peaking = {:5.4}".format(peaking)
+		ptext = "peaking = {:5.4} @ {} cm".format(peaking, int(xplot))
 		ax2.text(xplot, peaking, ptext, ha="center", va="bottom")
 	if keff:
 		ktext = "$k_{eff} = " + "{:7.5}".format(keff) + "$"
-		ax2.text(0, peaking, ktext)
+		ax2.text(xmax*.01, peaking, ktext, ha="left")
+	ax2.set_xlim(xvals[0], xmax)
 	ax2.set_ylim(0, 1.1*peaking)
 	ax2.set_ylabel("Relative fission source")
 	return fig, (ax1, ax2)
