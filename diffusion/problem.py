@@ -107,9 +107,10 @@ class Problem1D:
 		matA, matB = matrices.populate_matrices(
 			self._node_list, self._ngroups, self._east_bc, self._west_bc)
 		assert matB.sum() > 0, "No fission cross section found!"
+		nx = self.num_nodes
 		solver = SolverClass(matA, matB)
 		if self.fuel:
-			solver.guess_flux(self.fuel, self.num_nodes,
+			solver.guess_flux(self.fuel, nx,
 			                  self._west_bc, self._east_bc)
 			if not kguess:
 				kguess = self.fuel.get_kinf()
@@ -117,14 +118,17 @@ class Problem1D:
 		flux, source, keff = solver.solve_eigenvalue(kguess)
 		print("\tk_eff   = {:7.5f}".format(keff))
 		if plot_level >= 1:
+			# Normalize power to core-average, nonzero fission source
 			power = np.array(source)
-			power.shape = (self._ngroups, self.num_nodes)
+			power.shape = (self._ngroups, nx)
 			power = power.sum(axis=0)
 			power /= np.array([n.dx for n in self._node_list])
 			power[power == 0] = np.NaN
 			power /= np.nanmean(power)
 			peaking = np.nanmax(power)
 			print("\tpeaking = {:6.4f}".format(peaking))
+			# Normalize flux to core-average fast flux
+			flux /= flux[:nx].mean()
 			plotting.flux_and_fission_plot(
 				flux, power, self._node_list, keff, peaking)
 		if plot_level >= 2:
