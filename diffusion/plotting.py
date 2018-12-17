@@ -54,6 +54,7 @@ def flux_and_fission_plot(flux_vector, source_vector, node_list,
 	ax2.set_xlim(xvals[0], xmax)
 	ax2.set_ylim(0, 1.1*peaking)
 	ax2.set_ylabel("Relative fission source")
+	fig.tight_layout()
 	return fig, (ax1, ax2)
 
 
