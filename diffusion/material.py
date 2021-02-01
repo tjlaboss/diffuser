@@ -3,10 +3,11 @@
 # Class for multigroup diffusion material
 
 import numpy as np
+from textwrap import dedent
 from .matrices import get_off_diagonal
 
 
-class Material(object):
+class Material:
 	"""A multigroup material for neutron diffusion 
 	
 	Be sure to set all of the cross sections. You can check this by running
@@ -44,10 +45,10 @@ class Material(object):
 		self._sigma_s12 = None
 
 	def __str__(self):
-		rep = """\
-Material: {}
-  - {} groups
-  - Fissionable: {}""".format(self.name, self.ngroups, self.is_fissionable)
+		rep = dedent("""Material: {}
+		                  - {} groups
+		                  - Fissionable: {}"""
+		             ).format(self.name, self.ngroups, self.is_fissionable)
 		return rep
 
 	@property
@@ -156,7 +157,7 @@ Material: {}
 		elif self.ngroups == 2:
 			ratio = self.flux_ratio(bg2)
 			r1 = self.sigma_a[0] + self.sigma_s12
-			return (self.nu_sigma_f[0] + self.nu_sigma_f[1]/ratio)/ \
+			return (self.nu_sigma_f[0] + self.nu_sigma_f[1]/ratio) / \
 			       (self.d[0]*bg2 + r1)
 		else:
 			errstr = "k_inf calculation is only available for 1 or 2 groups."

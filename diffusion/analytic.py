@@ -5,7 +5,8 @@
 import numpy as np
 from scipy.integrate import quad
 
-class AnalyticProblem1D(object):
+
+class AnalyticProblem1D:
 	def __init__(self, fill, width=None):
 		self.fill = fill
 		self.ngroups = fill.ngroups

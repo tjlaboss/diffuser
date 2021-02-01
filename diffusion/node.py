@@ -2,7 +2,8 @@
 #
 # Classes for nodes on a diffusion mesh
 
-class Node1D(object):
+
+class Node1D:
 	"""A one-dimensional Cartesian node
 	
 	Parameters:

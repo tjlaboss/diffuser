@@ -91,10 +91,8 @@ class BaseSolver:
 		self.xguess = flux
 		return flux
 	
-	
 	def _solve_x(self, x, s, k):
 		pass
-	
 	
 	def solve_eigenvalue(self, kguess):
 		"""Iterate to solve for the eigenvalue and eigenvector

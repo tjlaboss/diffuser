@@ -2,6 +2,7 @@
 
 import numpy as np
 
+
 def populate_matrices(node_list, ngroups, bc_left, bc_right):
 	nx = len(node_list)
 	size = nx*ngroups

@@ -135,4 +135,3 @@ class Problem1D:
 			plotting.spy_plots(matA, matB)
 		if plot_level >= 3:
 			plotting.l2norm_plot(solver.get_l2norm_results())
-	
