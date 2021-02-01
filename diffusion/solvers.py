@@ -5,7 +5,7 @@
 # [A]x = 1/k*[B]x  with a different method.
 
 
-import scipy
+import numpy as np
 import scipy.linalg as la
 from .matrices import gauss_seidel, l2norm_1d
 
@@ -23,14 +23,14 @@ class BaseSolver:
 	def __init__(self, matA, matB, xguess=None,
 	             eps_flux=EPS_INNER, eps_source=EPS_OUTER, eps_k=EPS_OUTER):
 		if xguess is None:
-			xguess = scipy.ones(len(matA))
+			xguess = np.ones(len(matA))
 		self.xguess = xguess
 		self.eps_flux = eps_flux
 		self.eps_source = eps_source
 		self.eps_k = eps_k
 		self.matB = matB
 		self._solved = False
-		self._l2norm = scipy.zeros(MAX_OUTER)
+		self._l2norm = np.zeros(MAX_OUTER)
 	
 	def get_l2norm_results(self):
 		if self._solved:
@@ -65,17 +65,17 @@ class BaseSolver:
 		for bc in (bc_left, bc_right):
 			assert bc in ('r', 'v'), \
 				"Unknown boundary condition: {}".format(bc)
-		fshape = scipy.ones(nx)
-		cx = scipy.pi/nx
+		fshape = np.ones(nx)
+		cx = np.pi/nx
 		if bc_left == 'v' and bc_right == 'v':
 			# Cosine
-			f = lambda i: scipy.cos(cx*(i - nx/2))
+			f = lambda i: np.cos(cx*(i - nx/2))
 		elif bc_left == 'r' and bc_right == 'v':
 			# Half-cosine
-			f = lambda i: scipy.cos(cx*i)
+			f = lambda i: np.cos(cx*i)
 		elif bc_left == 'v' and bc_right == 'r':
 			# Half-cosine, the other way
-			f = lambda i: scipy.cos(cx*(nx - i))
+			f = lambda i: np.cos(cx*(nx - i))
 		elif bc_left == 'r' and bc_right == 'r':
 			# Flat
 			f = lambda i: i
@@ -85,7 +85,7 @@ class BaseSolver:
 		if fuel.ngroups == 1:
 			flux = fshape
 		else:
-			flux = scipy.zeros(fuel.ngroups*nx)
+			flux = np.zeros(fuel.ngroups*nx)
 			flux[:nx] = fshape
 			flux[nx:] = fshape*fuel.flux_ratio()
 		self.xguess = flux
@@ -112,7 +112,7 @@ class BaseSolver:
 		if not kguess:
 			kguess = 1.0
 		sguess = self.matB.dot(self.xguess)
-		oldx = scipy.array(self.xguess)
+		oldx = np.array(self.xguess)
 		kdiff = 1 + self.eps_k
 		sdiff = 1 + self.eps_source
 		c_outer = 0
@@ -238,7 +238,7 @@ class GaussSeidelSolver(BaseSolver):
 	             eps_flux=EPS_INNER, eps_source=EPS_OUTER, eps_k=EPS_OUTER):
 		super().__init__(
 			matA, matB, xguess, eps_flux, eps_source, eps_k)
-		self.matL = scipy.tril(matA)
+		self.matL = np.tril(matA)
 		self.matU = matA - self.matL
 		del matA
 	

@@ -2,7 +2,7 @@
 #
 # Analytic solutions to homogeneous problems
 
-import scipy
+import numpy as np
 from scipy.integrate import quad
 
 class AnalyticProblem1D(object):
@@ -63,10 +63,10 @@ class AnalyticProblem1D(object):
 		return fs
 	
 	def get_flux_vector(self, coordvec, g=None):
-		return scipy.array([self.flux(x, g) for x in coordvec])
+		return np.array([self.flux(x, g) for x in coordvec])
 	
 	def get_fission_source_vector(self, coordvec):
-		return scipy.array([self.fission_source(x) for x in coordvec])
+		return np.array([self.fission_source(x) for x in coordvec])
 	
 	def get_peaking_factor(self):
 		if self.width is None:
@@ -99,7 +99,7 @@ class AnalyticSlab1D(AnalyticProblem1D):
 		if self.width is None:
 			# infinite
 			return 0.0
-		return (scipy.pi/self.width)**2
+		return (np.pi/self.width)**2
 	
 	def flux(self, x, g=None):
 		"""Find the groupwise scalar flux somewhere on the slab
@@ -118,7 +118,7 @@ class AnalyticSlab1D(AnalyticProblem1D):
 			return res
 		# otherwise, it's finite
 		extrap1 = 4*self.fill.d[0]
-		flux1 = scipy.cos(scipy.pi*x/(self.width + extrap1))
+		flux1 = np.cos(np.pi*x/(self.width + extrap1))
 		if self.ngroups == 1:
 			return flux1
 		elif self.ngroups == 2:
@@ -126,7 +126,7 @@ class AnalyticSlab1D(AnalyticProblem1D):
 				return self.mag1*flux1
 			elif g == 1:
 				extrap2 = 4*self.fill.d[1]
-				return self.mag2*scipy.cos(scipy.pi*x/(self.width + extrap2))
+				return self.mag2*np.cos(np.pi*x/(self.width + extrap2))
 			else:
 				self._invalid_group(g)
 		else:

@@ -1,14 +1,14 @@
 # Functions for dealing with the diffusion matrices
 
-import scipy
+import numpy as np
 
 def populate_matrices(node_list, ngroups, bc_left, bc_right):
 	nx = len(node_list)
 	size = nx*ngroups
 	# Matrix containing the entries for A; will be reshaped later.
-	templateA = scipy.zeros((nx, nx, ngroups))
-	templateB = scipy.zeros((nx, nx, ngroups))
-	templateT = scipy.zeros((nx, nx, ngroups, ngroups))
+	templateA = np.zeros((nx, nx, ngroups))
+	templateB = np.zeros((nx, nx, ngroups))
+	templateT = np.zeros((nx, nx, ngroups, ngroups))
 	for i, node_c in enumerate(node_list):
 		if i == 0:
 			# LHS (West) boundary
@@ -59,8 +59,8 @@ def populate_matrices(node_list, ngroups, bc_left, bc_right):
 		matrixA = templateA.squeeze()
 		matrixB = templateB.squeeze()
 	else:
-		matrixA = scipy.zeros((size, size))
-		matrixB = scipy.zeros((size, size))
+		matrixA = np.zeros((size, size))
+		matrixB = np.zeros((size, size))
 		for g in range(ngroups):
 			i0 = g*nx
 			i1 = (g+1)*nx
@@ -136,13 +136,13 @@ def l2norm_1d(new, old):
 	for i, n in enumerate(new):
 		if n:
 			diff += ((n - old[i])/n)**2
-	norm = scipy.sqrt(diff/nx)
+	norm = np.sqrt(diff/nx)
 	return norm
 
 
 def get_off_diagonal(matrix):
 	"""Return only the off-diagnoal terms of a square matrix."""
-	off_diag = scipy.array(matrix, dtype=matrix.dtype)
-	off_diag[scipy.diag_indices_from(matrix)] = 0
+	off_diag = np.array(matrix, dtype=matrix.dtype)
+	off_diag[np.diag_indices_from(matrix)] = 0
 	return off_diag
 

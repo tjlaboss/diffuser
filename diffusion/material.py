@@ -2,7 +2,7 @@
 #
 # Class for multigroup diffusion material
 
-import scipy
+import numpy as np
 from .matrices import get_off_diagonal
 
 
@@ -34,11 +34,11 @@ class Material(object):
 		self.ngroups = ngroups
 		self.name = name
 
-		self._d = scipy.zeros(ngroups)
-		self._sigma_a = scipy.zeros(ngroups)
-		self._sigma_r = scipy.zeros(ngroups)
-		self._scatter_matrix = scipy.zeros((ngroups, ngroups))
-		self._nu_sigma_f = scipy.zeros(ngroups)
+		self._d = np.zeros(ngroups)
+		self._sigma_a = np.zeros(ngroups)
+		self._sigma_r = np.zeros(ngroups)
+		self._scatter_matrix = np.zeros((ngroups, ngroups))
+		self._nu_sigma_f = np.zeros(ngroups)
 
 		self._is_fissionable = False
 		self._sigma_s12 = None
@@ -152,7 +152,7 @@ Material: {}
 		if not self.is_fissionable:
 			return 0.0
 		elif self.ngroups == 1:
-			return scipy.float64(self.nu_sigma_f/(self.sigma_a + self.d*bg2))
+			return np.float64(self.nu_sigma_f/(self.sigma_a + self.d*bg2))
 		elif self.ngroups == 2:
 			ratio = self.flux_ratio(bg2)
 			r1 = self.sigma_a[0] + self.sigma_s12
