@@ -1,12 +1,50 @@
-# Plotting
-#
-# Common plots
+"""
+Plotting
+
+Common plots
+"""
 
 from pylab import *
 
 
 def flux_and_fission_plot(flux_vector, source_vector, node_list,
                           keff=None, peaking=None):
+	"""Plot flux and fission source profiles
+	
+	Parameters:
+	-----------
+	:type flux_vector: np.ndarray(ndim=ngroups)
+	:param flux_vector:
+		Array of neutron flux.
+	
+	:type source_vector: np.ndarray(ndim=1)
+	:param source_vector:
+		Fission source vector.
+	
+	:type node_list: list of :class:`diffusion.node.Node1D`
+	:param node_list:
+		List of nodes with which the problem is filled
+	
+	:type keff: float; optional
+	:param keff:
+		Eigenvalue to optionally include on the plot.
+		[Default: None]
+	
+	:type peaking: float; optional
+	:param peaking:
+		Peaking factor to include on the plot.
+		If not provided, will use the nanmax of source_vector.
+
+	Returns:
+	--------
+	:rtype: tuple:
+	:returns:
+		fig: :class:`matplotlib.figure.Figure`
+			Flux vector
+		axes: tuple(len=2) of :class:`matplotlib.axes.Axes`
+			axes[0]: Flux plot
+			axes[1]: Fission source plot
+	"""
 	fig = figure()
 	ax1 = fig.add_subplot(111)
 	nx = len(node_list)
@@ -59,6 +97,28 @@ def flux_and_fission_plot(flux_vector, source_vector, node_list,
 
 
 def spy_plots(matA, matB):
+	"""Solver using a Gauss-Seidel algorithm
+
+	Parameters:
+	-----------
+	:type matA: np.ndarray(ndim=2)
+	:param matA:
+		LHS Destruction matrix
+
+	:type matB: np.ndarray(ndim=2)
+	:param matB:
+		RHS Production matrix
+		
+	Returns:
+	--------
+	:rtype: tuple
+	:returns:
+		fig: :class:`matplotlib.figure.Figure`
+			Flux vector
+		axes: tuple(len=2) of :class:`matplotlib.axes.Axes`
+			axes[0]: A-matrix plot
+			axes[1]: B-matrix plot
+	"""
 	fig = figure()
 	ax1 = fig.add_subplot(121)
 	ax1.spy(matA)
@@ -71,6 +131,23 @@ def spy_plots(matA, matB):
 
 
 def l2norm_plot(l2norm_vector):
+	"""Plot the convergence of the L2 norm over iterations
+	
+	Parameters:
+	-----------
+	:type l2norm_vector: np.ndarray(ndim=1, dtype=float)
+	:param l2norm_vector:
+		Vector the L2 norm at each iteration
+	
+	Returns:
+	--------
+	:rtype: tuple
+	:returns:
+		fig: :class:`matplotlib.figure.Figure`
+			Flux vector
+		axes: tuple(len=1) of :class:`matplotlib.axes.Axes`
+			axes[0]: Flux plot
+	"""
 	fig = figure()
 	ax = fig.add_subplot(111)
 	ax.semilogy(l2norm_vector)

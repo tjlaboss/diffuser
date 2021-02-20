@@ -1,12 +1,28 @@
-# Analytic
-#
-# Analytic solutions to homogeneous problems
+"""
+Analytic
+
+Analytic solutions to homogeneous problems
+"""
 
 import numpy as np
 from scipy.integrate import quad
 
 
 class AnalyticProblem1D:
+	"""Base class for analytic solutions to homogeneous 1D problems
+	
+	Parameters:
+	-----------
+	:type fill: :class:`diffusion.material.Material`
+	:param fill:
+		Material the medium is filled with
+	
+	:type width: float, cm
+	:param width:
+		Width or diameter of the medium
+		[Default: None]
+	
+	"""
 	def __init__(self, fill, width=None):
 		self.fill = fill
 		self.ngroups = fill.ngroups
@@ -107,12 +123,19 @@ class AnalyticSlab1D(AnalyticProblem1D):
 		
 		Parameters:
 		-----------
-		x:          float, cm; x-coordinate to find the flux at
-		g:          int, optional for 1-group; which energy group's flux
+		:type x: float, cm
+		:param x:
+			x-coordinate to find the flux at
+		
+		:type g: int, optional for 1-group
+		:param g:
+			Which energy group's flux
 		
 		Returns:
 		--------
-		float; normalized scalar flux at x
+		:rtype: float
+		:returns:
+			normalized scalar flux at x
 		"""
 		res = super().flux(x, g)
 		if res is not None:
