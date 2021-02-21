@@ -3,6 +3,7 @@ python:
  - "3.6"
 before_script:
   - pip install sphinx
+  - pip install sphinx_rtd_theme
 script:
   - cd docs
   - sphinx-apidoc -e -o . ../diffusion/
