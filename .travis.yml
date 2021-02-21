@@ -10,7 +10,7 @@ script:
   - cd docs
   - sphinx-apidoc -e -o . ../diffusion/
   - make html
-  - cp -r _build/html/* .
+  - touch _build/html/.nojeykll
 deploy:
   provider: pages
   skip_cleanup: true
