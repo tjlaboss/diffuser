@@ -1,13 +1,16 @@
 language: python
 python:
  - "3.6"
-before_script:
+install:
   - pip install sphinx
   - pip install sphinx_rtd_theme
+  - pip install matplotlib
+  - pip install scipy
 script:
   - cd docs
   - sphinx-apidoc -e -o . ../diffusion/
   - make html
+  - cp 
 deploy:
   provider: pages
   skip_cleanup: true
