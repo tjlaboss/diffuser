@@ -1,6 +1,8 @@
-# Node
-#
-# Classes for nodes on a diffusion mesh
+"""
+Node
+
+Classes for nodes on a diffusion mesh
+"""
 
 
 class Node1D:
@@ -8,9 +10,17 @@ class Node1D:
 	
 	Parameters:
 	-----------
-	ngroups:        int; number of energy groups
-	fill:           Material
-	dx:             float, cm; node width
+	:type ngroups: int
+	:param ngroups:
+		Number of energy groups
+	
+	:type fill: :class:`diffusion.material.Material`
+	:param fill:
+		Material with which the node is filled
+	
+	:type dx: float, cm
+	:param dx:
+		Node width
 	"""
 	def __init__(self, ngroups, fill, dx):
 		self._ngroups = ngroups
@@ -61,14 +71,22 @@ class Node1D:
 		
 		Parameters:
 		-----------
-		left:       Node1D; the node at [i-1]
-		right:      Node1D; the node at [i+1]
+		:type left: :class:`diffusion.node.Node1D`
+		:param left:
+			The node at [i-1]
+		
+		:type right: :class:`diffusion.node.Node1D`
+		:param right:
+			The node at [i+1]
 		
 		Returns:
 		--------
-		a:          list of scipy.array; A-matrix entries at
-		            [i-1], [i], [i+1]
-		b:          scipy.array; B-matrix entry at [i]
+		:rtype: tuple
+		:returns:
+			a:  list of float
+				A-matrix entries at [i-1], [i], [i+1]
+			b:  float
+				B-matrix entry at [i]
 		"""
 		a = [None]*3
 		dhat_left = self.get_Dhat(left)
@@ -85,14 +103,21 @@ class Node1D:
 		
 		Parameter:
 		----------
-		adjacent:   Node1D; the node at [i+1] (if western boundary)
-		            or at [i-1] (if eastern boundary)
+		:type adjacent: :class:`diffusion.node.Node1D`
+		:param adjacent:
+			The node at [i+1] (if western boundary)
+		    or at [i-1] (if eastern boundary)
 		
 		Returns:
 		--------
-		a:          list of scipy.array; A-matrix entries at
-		            ([i-1] or [i+1]), [i]
-		b:          scipy.array; B-matrix entry at [i]
+		:rtype: tuple:
+		:returns:
+			a: list of float
+				A-matrix entries at ([i-1] OR [i+1]), [i]
+			b: float
+				B-matrix entry at [i]
+			t: float
+				T-matrix entry at [i]
 		"""
 		a = [None]*2
 		dhat = self.get_Dhat(adjacent)
@@ -108,14 +133,21 @@ class Node1D:
 		
 		Parameter:
 		----------
-		adjacent:   Node1D; the node at [i+1] (if western boundary)
-		            or at [i-1] (if eastern boundary)
+		:type adjacent: :class:`diffusion.node.Node1D`
+		:param adjacent:
+			The node at [i+1] (if western boundary)
+			or at [i-1] (if eastern boundary)
 
 		Returns:
 		--------
-		a:          list of scipy.array; A-matrix entries at
-		            ([i-1] or [i+1]), [i]
-		b:          scipy.array; B-matrix entry at [i]
+		:rtype: tuple:
+		:returns:
+			a: list of float
+				A-matrix entries at ([i-1] OR [i+1]), [i]
+			b: float
+				B-matrix entry at [i]
+			t:
+				T-matrix entry at [i]
 		"""
 		a = [None]*2
 		dhat = self.get_Dhat(adjacent)

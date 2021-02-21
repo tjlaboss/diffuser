@@ -1,9 +1,42 @@
-# Functions for dealing with the diffusion matrices
+"""
+Functions for dealing with the diffusion matrices
+"""
 
 import numpy as np
 
 
 def populate_matrices(node_list, ngroups, bc_left, bc_right):
+	"""
+	
+	Parameters:
+	-----------
+	:param node_list: list of :class:`diffusion.node.Node1D`
+	:param node_list:
+		List of nodes, from left to right.
+	
+	:param ngroups: int
+	:param ngroups:
+		Number of energy groups
+	
+	:type bc_left: str
+	:param bc_left:
+		Left (west) boundary condition.
+		'r' for reflective, or 'v' for vacuum.
+	
+	:type bc_right: str
+	:param bc_right:
+		Right (east) boundary condition.
+		'r' for reflective, or 'v' for vacuum.
+
+	Returns:
+	--------
+	:rtype: tuple:
+		:returns:
+			matrixA: np.ndarray
+				LHS Destruction matrix
+			matrixB: float
+				RHS Production matrix
+	"""
 	nx = len(node_list)
 	size = nx*ngroups
 	# Matrix containing the entries for A; will be reshaped later.
@@ -93,15 +126,31 @@ def gauss_seidel(L, U, S, x, k):
 
 	Parameters:
 	-----------
-	L:	array; lower-triangular square matrix, containing the diagonal
-	U:	array; upper-triangular square matrix, only off-diagnal terms
-	S:	array; source vector
-	x:	array; flux vector of last iteration
-	k:  float; eigenvalue from the last iteration
+	:type L: np.ndarray(ndim=2)
+	:param L:
+		Lower-triangular square matrix, containing the diagonal
+	
+	:type U: np.ndarray(ndim=2)
+	:param U:
+		Upper-triangular square matrix, only off-diagnal terms
+	
+	:type S: np.ndarray(ndim=1)
+	:param S:
+		Source vector
+	
+	:type x: np.ndarray;
+	:param x:
+		Flux vector of last iteration
+	
+	:type k: float
+	:param k:
+		Eigenvalue from the last iteration
 
 	Returns:
 	--------
-	x:	array; solution vector
+	:rtype: np.ndarray
+	:returns:
+		Flux solution vector
 	"""
 	n = len(x) - 1
 	m = len(x)//2
@@ -120,17 +169,24 @@ def gauss_seidel(L, U, S, x, k):
 
 
 def l2norm_1d(new, old):
-	"""Compare the L2 engineering norms of two 1-dimentional arrays
+	"""Compare the L2 engineering norms of two 1-dimensional arrays
 
 	Parameters:
 	-----------
-	new:        array of the latest values
-	old:        array of the reference values.
-	            Must be the same shape as `new'.
+	:type new: np.ndarray
+	:param new:
+		Vector of the latest values
+	
+	:type old: np.ndarray
+	:param old:
+		Vector of the reference values.
+		Must be the same shape as `new'.
 
 	Returns:
 	--------
-	norm:       float; the L2 norm of the arrays
+	:rtype: float
+	:returns:
+		The L2 norm of the arrays
 	"""
 	diff = 0
 	nx = len(new)
@@ -142,7 +198,20 @@ def l2norm_1d(new, old):
 
 
 def get_off_diagonal(matrix):
-	"""Return only the off-diagnoal terms of a square matrix."""
+	"""Return only the off-diagonal terms of a square matrix.
+	
+	Parameter:
+	----------
+	:type matrix: np.ndarray(ndim=2)
+	:param matrix:
+		Square matrix
+	
+	Returns:
+	--------
+	:rtype: np.ndarray(ndim=2)
+	:returns:
+		Copy of `matrix' with the diagonal terms zeroed out.
+	"""
 	off_diag = np.array(matrix, dtype=matrix.dtype)
 	off_diag[np.diag_indices_from(matrix)] = 0
 	return off_diag

@@ -1,6 +1,8 @@
-# Problem
-#
-# Class for a diffusion problem that populates and solves itself
+"""
+Problem
+
+Class for a diffusion problem that populates and solves itself
+"""
 
 import numpy as np
 from . import node
@@ -9,6 +11,22 @@ from . import plotting
 
 
 def _get_boundary_condition(bc_type):
+	"""Turn full boundary condition names into one boundary condition key
+	
+	Parameter:
+	----------
+	:type bc_type: str
+	:param bc_type:
+		Boundary condition type:
+			Vacuum:     'v', 'vacuum', or 'zero-incoming'
+			Reflective: 'r', 'reflective', or 'zero-current'
+	
+	Returns;
+	--------
+	:rtype: str
+	:returns:
+		Boundary condition 'v' or 'r'
+	"""
 	bc_type = bc_type.lower()
 	if bc_type in ('v', 'vacuum', 'zero-incoming'):
 		return 'v'
@@ -20,6 +38,20 @@ def _get_boundary_condition(bc_type):
 
 
 class Problem1D:
+	"""1D Neutron Diffusion Problem
+	
+	Parameters:
+	-----------
+	:type ngroups: int
+	:param ngroups:
+		Number of energy groups
+	
+	:type fuel: :class:`diffusion.material.Material`; optional
+	:param fuel:
+		Fuel material. Used for initial solution guess.
+		[Default: None]
+	
+	"""
 	def __init__(self, ngroups, fuel=None):
 		self.fuel = fuel
 		self._ngroups = ngroups
@@ -61,7 +93,10 @@ class Problem1D:
 		
 		Parameter:
 		----------
-		bc_type:    str; 'v' for vacuum or 'r' for reflective
+		:type bc_type: str
+		:param bc_type:
+			Boundary condition type.
+			'v' for vacuum or 'r' for reflective
 		"""
 		self._west_bc = _get_boundary_condition(bc_type)
 	
@@ -70,12 +105,33 @@ class Problem1D:
 		
 		Parameter:
 		----------
-		bc_type:    str; 'v' for vacuum or 'r' for reflective
+		:type bc_type: str
+		:param bc_type:
+			Boundary condition type.
+			'v' for vacuum or 'r' for reflective
 		"""
 		self._east_bc = _get_boundary_condition(bc_type)
 	
 	def add_region(self, fill, xwidth, num_nodes):
-		"""todo"""
+		"""Add a material region to the problem
+		
+		Adds a region of a single material and one or more nodes
+		to the problem. Nodes are added from left to right.
+		
+		Parameters:
+		-----------
+		:type fill: :class:`diffusion.material.Material`;
+		:param fill:
+			Material with which to fill the new node(s).
+		
+		:type xwidth: float; cm
+		:param xwidth:
+			Width of the new region.
+			
+		:type num_nodes: int
+		:param num_nodes:
+			Number of nodes to split the new region into.
+		"""
 		assert xwidth > 0, "Width must be positive."
 		self._xwidth += xwidth
 		dx = xwidth / num_nodes
@@ -94,14 +150,19 @@ class Problem1D:
 		
 		Parameters:
 		-----------
-		SolverClass:    derived class of BaseSolver;
-		                which numerical solver to use for the matrix solution
+		:type SolverClass: derived class of :class:`diffusion.solvers.BaseSolver`
+		:param SolverClass:
+			Which numerical solver to use for the matrix solution
 		
-		kguess:         float, optional; guess to use for k_eff
-		                [Default: k_inf of self.fuel if available; otherwise 1]
+		:type kguess: float; optional
+		:param kguess:
+			Guess to use for k_eff
+			[Default: k_inf of self.fuel if available; otherwise 1]
 		
-		plot_level      int, optional; how much plotting to do
-		                [Default: 0]
+		:type plot_level: int; optional
+		:param plot_level:
+			How much plotting to do
+			[Default: 0]
 		"""
 		self._assert_ready()
 		matA, matB = matrices.populate_matrices(
@@ -110,8 +171,7 @@ class Problem1D:
 		nx = self.num_nodes
 		solver = SolverClass(matA, matB)
 		if self.fuel:
-			solver.guess_flux(self.fuel, nx,
-			                  self._west_bc, self._east_bc)
+			solver.guess_flux(self.fuel, nx, self._west_bc, self._east_bc)
 			if not kguess:
 				kguess = self.fuel.get_kinf()
 		# Do the computation
