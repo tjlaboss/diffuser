@@ -4,7 +4,8 @@ Plotting
 Common plots
 """
 
-from pylab import *
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 def flux_and_fission_plot(flux_vector, source_vector, node_list,
@@ -45,7 +46,7 @@ def flux_and_fission_plot(flux_vector, source_vector, node_list,
 			axes[0]: Flux plot
 			axes[1]: Fission source plot
 	"""
-	fig = figure()
+	fig = plt.figure()
 	ax1 = fig.add_subplot(111)
 	nx = len(node_list)
 	xvals = np.cumsum([node.dx for node in node_list])
@@ -72,7 +73,7 @@ def flux_and_fission_plot(flux_vector, source_vector, node_list,
 	# Power distribution plot
 	ax2 = ax1.twinx()
 	if peaking is None:
-		peaking = nanmax(source_vector)
+		peaking = np.nanmax(source_vector)
 	lf = ax2.plot(xvals, source_vector, "-", color="gold", label="Fission Source")
 	lines += lf
 	labels = [l.get_label() for l in lines]
@@ -82,8 +83,7 @@ def flux_and_fission_plot(flux_vector, source_vector, node_list,
 		imax = np.nanargmax(source_vector[::-1])  # Get the last peak.
 		xplot = xvals[imax]
 		hwidth = xmax / 10.0
-		ax2.plot([xplot - hwidth, xplot + hwidth], [peaking, peaking],
-		         '-', color="gray")
+		ax2.plot([xplot - hwidth, xplot + hwidth], [peaking, peaking], '-', color="gray")
 		ptext = "peaking = {:5.4} @ {} cm".format(peaking, int(xplot))
 		ax2.text(xplot, peaking, ptext, ha="center", va="bottom")
 	if keff:
@@ -119,7 +119,7 @@ def spy_plots(matA, matB):
 			axes[0]: A-matrix plot
 			axes[1]: B-matrix plot
 	"""
-	fig = figure()
+	fig = plt.figure()
 	ax1 = fig.add_subplot(121)
 	ax1.spy(matA)
 	ax1.set_title("[A]\n", fontsize=12)
@@ -148,7 +148,7 @@ def l2norm_plot(l2norm_vector):
 		axes: tuple(len=1) of :class:`matplotlib.axes.Axes`
 			axes[0]: Flux plot
 	"""
-	fig = figure()
+	fig = plt.figure()
 	ax = fig.add_subplot(111)
 	ax.semilogy(l2norm_vector)
 	ax.set_xlabel("Outer Iteration")
