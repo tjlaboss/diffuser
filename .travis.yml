@@ -8,11 +8,11 @@ script:
   - cd docs
   - sphinx-apidoc -e -o . ../diffusion/
   - make html
-  - mv _build/html/* .
 deploy:
   provider: pages
   skip_cleanup: true
   github_token: $PAGES_TOKEN
   keep_history: true
+  local_dir: docs/_build/html/
   on:
     branch: rtd
