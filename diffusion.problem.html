@@ -98,7 +98,7 @@
 <li class="toctree-l4"><a class="reference internal" href="diffusion.solvers.html">diffusion.solvers module</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="diffusion.html#module-contents">Module contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="diffusion.html#module-diffusion">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -174,8 +174,106 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="diffusion-problem-module">
-<h1>diffusion.problem module<a class="headerlink" href="#diffusion-problem-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-diffusion.problem">
+<span id="diffusion-problem-module"></span><h1>diffusion.problem module<a class="headerlink" href="#module-diffusion.problem" title="Permalink to this headline">¶</a></h1>
+<p>Problem</p>
+<p>Class for a diffusion problem that populates and solves itself</p>
+<dl class="py class">
+<dt id="diffusion.problem.Problem1D">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">diffusion.problem.</span></code><code class="sig-name descname"><span class="pre">Problem1D</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ngroups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fuel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.problem.Problem1D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>1D Neutron Diffusion Problem</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ngroups</strong> (<em>int</em>) – Number of energy groups</p></li>
+<li><p><strong>fuel</strong> (<a class="reference internal" href="diffusion.material.html#diffusion.material.Material" title="diffusion.material.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">diffusion.material.Material</span></code></a>; optional) – Fuel material. Used for initial solution guess.
+[Default: None]</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="diffusion.problem.Problem1D.add_east_bc">
+<code class="sig-name descname"><span class="pre">add_east_bc</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bc_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.problem.Problem1D.add_east_bc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the wetern (left) boundary condition</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bc_type</strong> (<em>str</em>) – Boundary condition type.
+‘v’ for vacuum or ‘r’ for reflective</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.problem.Problem1D.add_region">
+<code class="sig-name descname"><span class="pre">add_region</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fill</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xwidth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_nodes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.problem.Problem1D.add_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a material region to the problem</p>
+<p>Adds a region of a single material and one or more nodes
+to the problem. Nodes are added from left to right.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fill</strong> (<a class="reference internal" href="diffusion.material.html#diffusion.material.Material" title="diffusion.material.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">diffusion.material.Material</span></code></a>;) – Material with which to fill the new node(s).</p></li>
+<li><p><strong>xwidth</strong> (<em>float; cm</em>) – Width of the new region.</p></li>
+<li><p><strong>num_nodes</strong> (<em>int</em>) – Number of nodes to split the new region into.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.problem.Problem1D.add_west_bc">
+<code class="sig-name descname"><span class="pre">add_west_bc</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bc_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.problem.Problem1D.add_west_bc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the wetern (left) boundary condition</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bc_type</strong> (<em>str</em>) – Boundary condition type.
+‘v’ for vacuum or ‘r’ for reflective</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.problem.Problem1D.ngroups">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">ngroups</span></code><a class="headerlink" href="#diffusion.problem.Problem1D.ngroups" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.problem.Problem1D.num_nodes">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">num_nodes</span></code><a class="headerlink" href="#diffusion.problem.Problem1D.num_nodes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.problem.Problem1D.run">
+<code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">SolverClass</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kguess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.problem.Problem1D.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the numerical simulation</p>
+<dl class="simple">
+<dt>Guide to plot levels:</dt><dd><p>Level 0:  (default) no plots
+Level 1:  Flux and fission source plots only
+Level 2:  Level 1 + matrix spy() plots
+Level 3:  Level 2 + L2norm convergence plot</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>SolverClass</strong> (derived class of <a class="reference internal" href="diffusion.solvers.html#diffusion.solvers.BaseSolver" title="diffusion.solvers.BaseSolver"><code class="xref py py-class docutils literal notranslate"><span class="pre">diffusion.solvers.BaseSolver</span></code></a>) – Which numerical solver to use for the matrix solution</p></li>
+<li><p><strong>kguess</strong> (<em>float; optional</em>) – Guess to use for k_eff
+[Default: k_inf of self.fuel if available; otherwise 1]</p></li>
+<li><p><strong>plot_level</strong> (<em>int; optional</em>) – How much plotting to do
+[Default: 0]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.problem.Problem1D.xwidth">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">xwidth</span></code><a class="headerlink" href="#diffusion.problem.Problem1D.xwidth" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 
 

@@ -98,7 +98,7 @@
 <li class="toctree-l4"><a class="reference internal" href="diffusion.solvers.html">diffusion.solvers module</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="diffusion.html#module-contents">Module contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="diffusion.html#module-diffusion">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -174,8 +174,195 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="diffusion-analytic-module">
-<h1>diffusion.analytic module<a class="headerlink" href="#diffusion-analytic-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-diffusion.analytic">
+<span id="diffusion-analytic-module"></span><h1>diffusion.analytic module<a class="headerlink" href="#module-diffusion.analytic" title="Permalink to this headline">¶</a></h1>
+<p>Analytic</p>
+<p>Analytic solutions to homogeneous problems</p>
+<dl class="py class">
+<dt id="diffusion.analytic.AnalyticProblem1D">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">diffusion.analytic.</span></code><code class="sig-name descname"><span class="pre">AnalyticProblem1D</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fill</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.analytic.AnalyticProblem1D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for analytic solutions to homogeneous 1D problems</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fill</strong> (<a class="reference internal" href="diffusion.material.html#diffusion.material.Material" title="diffusion.material.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">diffusion.material.Material</span></code></a>) – Material the medium is filled with</p></li>
+<li><p><strong>width</strong> (<em>float</em><em>, </em><em>cm</em>) – Width or diameter of the medium
+[Default: None]</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bg2</strong> (<em>float</em>) – Geometric buckling (exactly 0 if infinite)</p></li>
+<li><p><a class="reference internal" href="diffusion.problem.html#diffusion.problem.Problem1D.ngroups" title="diffusion.problem.Problem1D.ngroups"><strong>ngroups</strong></a> (<em>int</em>) – Number of energy groups</p></li>
+<li><p><strong>mag1</strong> (<em>float</em>) – Relative magnitude of fast flux.
+Only present if <a href="#id1"><span class="problematic" id="id2">`</span></a>ngroups’ is 2.</p></li>
+<li><p><strong>mag2</strong> (<em>float</em>) – Relative magnitude of thermal flux.
+Only present if <a href="#id3"><span class="problematic" id="id4">`</span></a>ngroups’ is 2.</p></li>
+<li><p><strong>ratio</strong> (<em>float</em>) – Ratio of mag1/mag2.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="diffusion.analytic.AnalyticProblem1D.fission_source">
+<code class="sig-name descname"><span class="pre">fission_source</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coord</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.analytic.AnalyticProblem1D.fission_source" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the fission source at a point</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>coord</strong> (<em>float</em><em>, </em><em>cm</em>) – Coordinate to calculate the fission source at.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Fission source at position <a href="#id5"><span class="problematic" id="id6">`</span></a>coord’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.analytic.AnalyticProblem1D.flux">
+<code class="sig-name descname"><span class="pre">flux</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coord</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.analytic.AnalyticProblem1D.flux" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the flux at a points</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>coord</strong> (<em>float</em><em>, </em><em>cm</em>) – Point to calculate the flux at</p></li>
+<li><p><strong>g</strong> (<em>int</em>) – Energy group index.
+Must be provided if ngroups &gt; 1.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Array of flux values at every point in <a href="#id7"><span class="problematic" id="id8">`</span></a>coordvec’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.analytic.AnalyticProblem1D.geometric_buckling">
+<code class="sig-name descname"><span class="pre">geometric_buckling</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.analytic.AnalyticProblem1D.geometric_buckling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.analytic.AnalyticProblem1D.get_fission_source_vector">
+<code class="sig-name descname"><span class="pre">get_fission_source_vector</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coordvec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.analytic.AnalyticProblem1D.get_fission_source_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the fission source vector at several points</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>coordvec</strong> (<em>list of float</em><em>, </em><em>cm</em>) – List of points to calculate the flux at</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Array of fission source values at every point in <a href="#id9"><span class="problematic" id="id10">`</span></a>coordvec’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.analytic.AnalyticProblem1D.get_flux_vector">
+<code class="sig-name descname"><span class="pre">get_flux_vector</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coordvec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.analytic.AnalyticProblem1D.get_flux_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the flux vector at several points</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>coordvec</strong> (<em>list of float</em><em>, </em><em>cm</em>) – List of points to calculate the flux at</p></li>
+<li><p><strong>g</strong> (<em>int; optional</em>) – Energy group index.
+Must be provided if ngroups &gt; 1.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Array of flux values at every point in <a href="#id11"><span class="problematic" id="id12">`</span></a>coordvec’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.analytic.AnalyticProblem1D.get_peaking_factor">
+<code class="sig-name descname"><span class="pre">get_peaking_factor</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.analytic.AnalyticProblem1D.get_peaking_factor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the analytic peaking factor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Peaking factor over the slab</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.analytic.AnalyticProblem1D.keff">
+<code class="sig-name descname"><span class="pre">keff</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.analytic.AnalyticProblem1D.keff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.analytic.AnalyticProblem1D.kinf">
+<code class="sig-name descname"><span class="pre">kinf</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.analytic.AnalyticProblem1D.kinf" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="diffusion.analytic.AnalyticSlab1D">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">diffusion.analytic.</span></code><code class="sig-name descname"><span class="pre">AnalyticSlab1D</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fill</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.analytic.AnalyticSlab1D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#diffusion.analytic.AnalyticProblem1D" title="diffusion.analytic.AnalyticProblem1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">diffusion.analytic.AnalyticProblem1D</span></code></a></p>
+<p>A one-dimensional Cartesian slab with a homogeneous medium</p>
+<dl class="py method">
+<dt id="diffusion.analytic.AnalyticSlab1D.flux">
+<code class="sig-name descname"><span class="pre">flux</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.analytic.AnalyticSlab1D.flux" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the groupwise scalar flux somewhere on the slab</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>float</em><em>, </em><em>cm</em>) – X-coordinate to find the flux at</p></li>
+<li><p><strong>g</strong> (<em>int</em><em>, </em><em>optional for 1-group</em>) – Which energy group’s flux</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>normalized scalar flux at x</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.analytic.AnalyticSlab1D.geometric_buckling">
+<code class="sig-name descname"><span class="pre">geometric_buckling</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.analytic.AnalyticSlab1D.geometric_buckling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Analytic geometric buckling in a Cartesian slab</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float, cm^-2</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Geometric buckling</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 

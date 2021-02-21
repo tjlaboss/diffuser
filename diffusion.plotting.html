@@ -98,7 +98,7 @@
 <li class="toctree-l4"><a class="reference internal" href="diffusion.solvers.html">diffusion.solvers module</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="diffusion.html#module-contents">Module contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="diffusion.html#module-diffusion">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -174,8 +174,98 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="diffusion-plotting-module">
-<h1>diffusion.plotting module<a class="headerlink" href="#diffusion-plotting-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-diffusion.plotting">
+<span id="diffusion-plotting-module"></span><h1>diffusion.plotting module<a class="headerlink" href="#module-diffusion.plotting" title="Permalink to this headline">¶</a></h1>
+<p>Plotting</p>
+<p>Common plots</p>
+<dl class="py function">
+<dt id="diffusion.plotting.flux_and_fission_plot">
+<code class="sig-prename descclassname"><span class="pre">diffusion.plotting.</span></code><code class="sig-name descname"><span class="pre">flux_and_fission_plot</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flux_vector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_vector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaking</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.plotting.flux_and_fission_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot flux and fission source profiles</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>flux_vector</strong> (<em>np.ndarray</em><em>(</em><em>ndim=ngroups</em><em>)</em>) – Array of neutron flux.</p></li>
+<li><p><strong>source_vector</strong> (<em>np.ndarray</em><em>(</em><em>ndim=1</em><em>)</em>) – Fission source vector.</p></li>
+<li><p><strong>node_list</strong> (list of <a class="reference internal" href="diffusion.node.html#diffusion.node.Node1D" title="diffusion.node.Node1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">diffusion.node.Node1D</span></code></a>) – List of nodes with which the problem is filled</p></li>
+<li><p><strong>keff</strong> (<em>float; optional</em>) – Eigenvalue to optionally include on the plot.
+[Default: None]</p></li>
+<li><p><strong>peaking</strong> (<em>float; optional</em>) – Peaking factor to include on the plot.
+If not provided, will use the nanmax of source_vector.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple:</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>fig: <code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.figure.Figure</span></code></dt><dd><p>Flux vector</p>
+</dd>
+<dt>axes: tuple(len=2) of <code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></dt><dd><p>axes[0]: Flux plot
+axes[1]: Fission source plot</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="diffusion.plotting.l2norm_plot">
+<code class="sig-prename descclassname"><span class="pre">diffusion.plotting.</span></code><code class="sig-name descname"><span class="pre">l2norm_plot</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l2norm_vector</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.plotting.l2norm_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the convergence of the L2 norm over iterations</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>l2norm_vector</strong> (<em>np.ndarray</em><em>(</em><em>ndim=1</em><em>, </em><em>dtype=float</em><em>)</em>) – Vector the L2 norm at each iteration</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>fig: <code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.figure.Figure</span></code></dt><dd><p>Flux vector</p>
+</dd>
+<dt>axes: tuple(len=1) of <code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></dt><dd><p>axes[0]: Flux plot</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="diffusion.plotting.spy_plots">
+<code class="sig-prename descclassname"><span class="pre">diffusion.plotting.</span></code><code class="sig-name descname"><span class="pre">spy_plots</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matA</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matB</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.plotting.spy_plots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solver using a Gauss-Seidel algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>matA</strong> (<em>np.ndarray</em><em>(</em><em>ndim=2</em><em>)</em>) – LHS Destruction matrix</p></li>
+<li><p><strong>matB</strong> (<em>np.ndarray</em><em>(</em><em>ndim=2</em><em>)</em>) – RHS Production matrix</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>fig: <code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.figure.Figure</span></code></dt><dd><p>Flux vector</p>
+</dd>
+<dt>axes: tuple(len=2) of <code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></dt><dd><p>axes[0]: A-matrix plot
+axes[1]: B-matrix plot</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 

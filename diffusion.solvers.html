@@ -32,6 +32,7 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -97,7 +98,7 @@
 <li class="toctree-l4 current"><a class="current reference internal" href="#">diffusion.solvers module</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="diffusion.html#module-contents">Module contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="diffusion.html#module-diffusion">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -173,8 +174,205 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="diffusion-solvers-module">
-<h1>diffusion.solvers module<a class="headerlink" href="#diffusion-solvers-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-diffusion.solvers">
+<span id="diffusion-solvers-module"></span><h1>diffusion.solvers module<a class="headerlink" href="#module-diffusion.solvers" title="Permalink to this headline">¶</a></h1>
+<p>Solvers</p>
+<p>Module containing the numerical solution to the eigenvalue problem.
+Three different solvers are provided, each solving the following
+matrix equation with a different method.</p>
+<div class="math notranslate nohighlight">
+\[[A] \vec{x} = \frac{1}{k} [B] \vec{x}\]</div>
+<dl class="py data">
+<dt id="diffusion.solvers.MAX_INNER">
+<code class="sig-prename descclassname"><span class="pre">diffusion.solvers.</span></code><code class="sig-name descname"><span class="pre">MAX_INNER</span></code><a class="headerlink" href="#diffusion.solvers.MAX_INNER" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default limit of inner (flux) iterations</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="diffusion.solvers.MAX_OUTER">
+<code class="sig-prename descclassname"><span class="pre">diffusion.solvers.</span></code><code class="sig-name descname"><span class="pre">MAX_OUTER</span></code><a class="headerlink" href="#diffusion.solvers.MAX_OUTER" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default limit of outer (fission source) iterations</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="diffusion.solvers.EPS_INNER">
+<code class="sig-prename descclassname"><span class="pre">diffusion.solvers.</span></code><code class="sig-name descname"><span class="pre">EPS_INNER</span></code><a class="headerlink" href="#diffusion.solvers.EPS_INNER" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default numerical tolerance for inner (flux) convergence</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="diffusion.solvers.EPS_OUTER">
+<code class="sig-prename descclassname"><span class="pre">diffusion.solvers.</span></code><code class="sig-name descname"><span class="pre">EPS_OUTER</span></code><a class="headerlink" href="#diffusion.solvers.EPS_OUTER" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default numerical tolerance for outer (fission source) convergence</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="diffusion.solvers.BaseSolver">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">diffusion.solvers.</span></code><code class="sig-name descname"><span class="pre">BaseSolver</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matA</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matB</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xguess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_flux</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.solvers.BaseSolver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for diffusion numerical solvers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>matA</strong> (<em>np.ndarray</em><em>(</em><em>ndim=2</em><em>)</em>) – LHS Destruction matrix</p></li>
+<li><p><strong>matB</strong> (<em>np.ndarray</em><em>(</em><em>ndim=2</em><em>)</em>) – RHS Production matrix</p></li>
+<li><p><strong>xguess</strong> (<em>np.ndarray</em><em>(</em><em>ndim=1</em><em>)</em><em>; optional</em>) – Initial guess for the flux vector.</p></li>
+<li><p><strong>eps_flux</strong> (<em>float; optional</em>) – Numerical tolerance for the inner (flux) convergence.
+[Default: <a class="reference internal" href="#diffusion.solvers.EPS_INNER" title="diffusion.solvers.EPS_INNER"><code class="xref py py-const docutils literal notranslate"><span class="pre">diffusion.solvers.EPS_INNER</span></code></a>]</p></li>
+<li><p><strong>eps_source</strong> (<em>float; optional</em>) – Numerical tolerance for the outer (fission source) convergence.
+[Default: <a class="reference internal" href="#diffusion.solvers.EPS_OUTER" title="diffusion.solvers.EPS_OUTER"><code class="xref py py-const docutils literal notranslate"><span class="pre">diffusion.solvers.EPS_OUTER</span></code></a>]</p></li>
+<li><p><strong>eps_k</strong> (<em>float; optional</em>) – Numerical tolerance for eigenvalue convergence.
+[Default: <a class="reference internal" href="#diffusion.solvers.EPS_OUTER" title="diffusion.solvers.EPS_OUTER"><code class="xref py py-const docutils literal notranslate"><span class="pre">diffusion.solvers.EPS_OUTER</span></code></a>]</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="diffusion.solvers.BaseSolver.get_l2norm_results">
+<code class="sig-name descname"><span class="pre">get_l2norm_results</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.solvers.BaseSolver.get_l2norm_results" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the L2norm of the solution at every outer iteration</p>
+<p>Raises a ValueError if the solver has not run yet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray(ndim=1, dtype=float)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>L2norm of the numerical solution</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.solvers.BaseSolver.guess_flux">
+<code class="sig-name descname"><span class="pre">guess_flux</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fuel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc_left</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc_right</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.solvers.BaseSolver.guess_flux" title="Permalink to this definition">¶</a></dt>
+<dd><p>Guess the flux vector from one of the materials</p>
+<p>There are four predefined shapes the flux can take,
+depending on the boundary conditions. If one of them is vacuum,
+the flux will be some variation of a cosine. If they’re both
+reflective, the flux will be flat.
+In 2 groups, the magnitude of the thermal group will be scaled.</p>
+<p>This also sets self.xguess to the newly calculated flux profile.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fuel</strong> (<a class="reference internal" href="diffusion.material.html#diffusion.material.Material" title="diffusion.material.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">diffusion.material.Material</span></code></a>) – Material with the cross sections to use for the guess</p></li>
+<li><p><strong>nx</strong> (<em>int</em>) – Number of spatial nodes</p></li>
+<li><p><strong>bc_left</strong> (<em>str</em>) – LHS boundary condition. in {‘v’ or ‘r’}</p></li>
+<li><p><strong>bc_right</strong> (<em>str</em>) – RHS boundary condition. in {‘v’ or ‘r’}</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray(shape=nx, dtype=float)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Guess for the flux vector</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.solvers.BaseSolver.solve_eigenvalue">
+<code class="sig-name descname"><span class="pre">solve_eigenvalue</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kguess</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.solvers.BaseSolver.solve_eigenvalue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate to solve for the eigenvalue and eigenvector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>kguess</strong> (<em>float</em>) – Guess for the eigenvalue</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple:</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>x: np.ndarray</dt><dd><p>Flux vector</p>
+</dd>
+<dt>s: np.ndarray</dt><dd><p>Fission source vector</p>
+</dd>
+<dt>k: float</dt><dd><p>Eigenvalue</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt id="diffusion.solvers.ConvergenceError">
+<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">diffusion.solvers.</span></code><code class="sig-name descname"><span class="pre">ConvergenceError</span></code><a class="headerlink" href="#diffusion.solvers.ConvergenceError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseException</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="diffusion.solvers.GaussSeidelSolver">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">diffusion.solvers.</span></code><code class="sig-name descname"><span class="pre">GaussSeidelSolver</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matA</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matB</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xguess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_flux</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.solvers.GaussSeidelSolver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#diffusion.solvers.BaseSolver" title="diffusion.solvers.BaseSolver"><code class="xref py py-class docutils literal notranslate"><span class="pre">diffusion.solvers.BaseSolver</span></code></a></p>
+<p>Solver using a Gauss-Seidel algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>matA</strong> (<em>np.ndarray</em><em>(</em><em>ndim=2</em><em>)</em>) – LHS Destruction matrix</p></li>
+<li><p><strong>matB</strong> (<em>np.ndarray</em><em>(</em><em>ndim=2</em><em>)</em>) – RHS Production matrix</p></li>
+<li><p><strong>xguess</strong> (<em>np.ndarray</em><em>(</em><em>ndim=1</em><em>)</em><em>; optional</em>) – Initial guess for the flux vector.</p></li>
+<li><p><strong>eps_flux</strong> (<em>float; optional</em>) – Numerical tolerance for the inner (flux) convergence.
+[Default: <a class="reference internal" href="#diffusion.solvers.EPS_INNER" title="diffusion.solvers.EPS_INNER"><code class="xref py py-const docutils literal notranslate"><span class="pre">diffusion.solvers.EPS_INNER</span></code></a>]</p></li>
+<li><p><strong>eps_source</strong> (<em>float; optional</em>) – Numerical tolerance for the outer (fission source) convergence.
+[Default: <a class="reference internal" href="#diffusion.solvers.EPS_OUTER" title="diffusion.solvers.EPS_OUTER"><code class="xref py py-const docutils literal notranslate"><span class="pre">diffusion.solvers.EPS_OUTER</span></code></a>]</p></li>
+<li><p><strong>eps_k</strong> (<em>float; optional</em>) – Numerical tolerance for eigenvalue convergence.
+[Default: <a class="reference internal" href="#diffusion.solvers.EPS_OUTER" title="diffusion.solvers.EPS_OUTER"><code class="xref py py-const docutils literal notranslate"><span class="pre">diffusion.solvers.EPS_OUTER</span></code></a>]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="diffusion.solvers.InversionSolver">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">diffusion.solvers.</span></code><code class="sig-name descname"><span class="pre">InversionSolver</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matA</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matB</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xguess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_flux</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.solvers.InversionSolver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#diffusion.solvers.BaseSolver" title="diffusion.solvers.BaseSolver"><code class="xref py py-class docutils literal notranslate"><span class="pre">diffusion.solvers.BaseSolver</span></code></a></p>
+<p>Solver using matrix inversion</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>matA</strong> (<em>np.ndarray</em><em>(</em><em>ndim=2</em><em>)</em>) – LHS Destruction matrix.
+Caution: inverted upon instantiation.</p></li>
+<li><p><strong>matB</strong> (<em>np.ndarray</em><em>(</em><em>ndim=2</em><em>)</em>) – RHS Production matrix</p></li>
+<li><p><strong>xguess</strong> (<em>np.ndarray</em><em>(</em><em>ndim=1</em><em>)</em><em>; optional</em>) – Initial guess for the flux vector.</p></li>
+<li><p><strong>eps_flux</strong> (<em>float; optional</em>) – Numerical tolerance for the inner (flux) convergence.
+[Default: <a class="reference internal" href="#diffusion.solvers.EPS_INNER" title="diffusion.solvers.EPS_INNER"><code class="xref py py-const docutils literal notranslate"><span class="pre">diffusion.solvers.EPS_INNER</span></code></a>]</p></li>
+<li><p><strong>eps_source</strong> (<em>float; optional</em>) – Numerical tolerance for the outer (fission source) convergence.
+[Default: <a class="reference internal" href="#diffusion.solvers.EPS_OUTER" title="diffusion.solvers.EPS_OUTER"><code class="xref py py-const docutils literal notranslate"><span class="pre">diffusion.solvers.EPS_OUTER</span></code></a>]</p></li>
+<li><p><strong>eps_k</strong> (<em>float; optional</em>) – Numerical tolerance for eigenvalue convergence.
+[Default: <a class="reference internal" href="#diffusion.solvers.EPS_OUTER" title="diffusion.solvers.EPS_OUTER"><code class="xref py py-const docutils literal notranslate"><span class="pre">diffusion.solvers.EPS_OUTER</span></code></a>]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="diffusion.solvers.ScipySolver">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">diffusion.solvers.</span></code><code class="sig-name descname"><span class="pre">ScipySolver</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matA</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matB</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xguess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_flux</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.solvers.ScipySolver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#diffusion.solvers.BaseSolver" title="diffusion.solvers.BaseSolver"><code class="xref py py-class docutils literal notranslate"><span class="pre">diffusion.solvers.BaseSolver</span></code></a></p>
+<p>Solver using Scipy’s linalg.solve</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>matA</strong> (<em>np.ndarray</em><em>(</em><em>ndim=2</em><em>)</em>) – LHS Destruction matrix</p></li>
+<li><p><strong>matB</strong> (<em>np.ndarray</em><em>(</em><em>ndim=2</em><em>)</em>) – RHS Production matrix</p></li>
+<li><p><strong>xguess</strong> (<em>np.ndarray</em><em>(</em><em>ndim=1</em><em>)</em><em>; optional</em>) – Initial guess for the flux vector.</p></li>
+<li><p><strong>eps_flux</strong> (<em>float; optional</em>) – Numerical tolerance for the inner (flux) convergence.
+[Default: <a class="reference internal" href="#diffusion.solvers.EPS_INNER" title="diffusion.solvers.EPS_INNER"><code class="xref py py-const docutils literal notranslate"><span class="pre">diffusion.solvers.EPS_INNER</span></code></a>]</p></li>
+<li><p><strong>eps_source</strong> (<em>float; optional</em>) – Numerical tolerance for the outer (fission source) convergence.
+[Default: <a class="reference internal" href="#diffusion.solvers.EPS_OUTER" title="diffusion.solvers.EPS_OUTER"><code class="xref py py-const docutils literal notranslate"><span class="pre">diffusion.solvers.EPS_OUTER</span></code></a>]</p></li>
+<li><p><strong>eps_k</strong> (<em>float; optional</em>) – Numerical tolerance for eigenvalue convergence.
+[Default: <a class="reference internal" href="#diffusion.solvers.EPS_OUTER" title="diffusion.solvers.EPS_OUTER"><code class="xref py py-const docutils literal notranslate"><span class="pre">diffusion.solvers.EPS_OUTER</span></code></a>]</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
