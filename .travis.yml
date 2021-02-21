@@ -1,7 +1,15 @@
+language: python
+python:
+ - "3.6"
+script:
+  - cd docs
+  - sphinx-apidoc -e -o . ../diffusion/
+  - make html
+  - mv _build/html/* .
 deploy:
   provider: pages
   skip_cleanup: true
-  github_token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+  github_token: $PAGES_TOKEN
   keep_history: true
   on:
     branch: rtd
