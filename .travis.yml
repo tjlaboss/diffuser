@@ -1,0 +1,23 @@
+language: python
+python:
+ - "3.6"
+install:
+  - pip install sphinx
+  - pip install sphinx_rtd_theme
+  - pip install matplotlib
+  - pip install scipy
+script:
+  - cd doc
+  - sphinx-apidoc -e -o . ../diffusion/
+  - make html
+  - touch _build/html/.nojeykll
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $PAGES_TOKEN
+  keep_history: true
+  local_dir: doc/_build/html/
+  on:
+    branch:
+	 - rtd
+	 - develop
