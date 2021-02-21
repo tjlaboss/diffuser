@@ -10,7 +10,6 @@ script:
   - cd doc
   - sphinx-apidoc -e -o . ../diffusion/
   - make html
-  - touch _build/html/.nojeykll
 deploy:
   provider: pages
   skip_cleanup: true
@@ -18,6 +17,4 @@ deploy:
   keep_history: true
   local_dir: doc/_build/html/
   on:
-    branch:
-	 - rtd
-	 - develop
+    branch: develop
