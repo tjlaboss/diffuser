@@ -6,6 +6,8 @@
 Welcome to diffuser's documentation!
 ====================================
 
+You can find the diffusion documentation below.
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
