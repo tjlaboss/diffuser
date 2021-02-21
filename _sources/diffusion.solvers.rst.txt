@@ -1,0 +1,7 @@
+diffusion.solvers module
+========================
+
+.. automodule:: diffusion.solvers
+   :members:
+   :undoc-members:
+   :show-inheritance:

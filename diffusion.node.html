@@ -1,0 +1,374 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>diffusion.node module &mdash; diffuser  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="diffusion.plotting module" href="diffusion.plotting.html" />
+    <link rel="prev" title="diffusion.matrices module" href="diffusion.matrices.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> diffuser
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">diffusion</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="diffusion.html">diffusion package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="diffusion.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="diffusion.analytic.html">diffusion.analytic module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diffusion.material.html">diffusion.material module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diffusion.matrices.html">diffusion.matrices module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">diffusion.node module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diffusion.plotting.html">diffusion.plotting module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diffusion.problem.html">diffusion.problem module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diffusion.solvers.html">diffusion.solvers module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="diffusion.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">diffuser</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">diffusion</a> &raquo;</li>
+        
+          <li><a href="diffusion.html">diffusion package</a> &raquo;</li>
+        
+      <li>diffusion.node module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/diffusion.node.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-diffusion.node">
+<span id="diffusion-node-module"></span><h1>diffusion.node module<a class="headerlink" href="#module-diffusion.node" title="Permalink to this headline">¶</a></h1>
+<p>Node</p>
+<p>Classes for nodes on a diffusion mesh</p>
+<dl class="py class">
+<dt id="diffusion.node.Node1D">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">diffusion.node.</span></code><code class="sig-name descname"><span class="pre">Node1D</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ngroups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.node.Node1D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A one-dimensional Cartesian node</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ngroups</strong> (<em>int</em>) – Number of energy groups</p></li>
+<li><p><strong>fill</strong> (<a class="reference internal" href="diffusion.material.html#diffusion.material.Material" title="diffusion.material.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">diffusion.material.Material</span></code></a>) – Material with which the node is filled</p></li>
+<li><p><strong>dx</strong> (<em>float</em><em>, </em><em>cm</em>) – Node width</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="diffusion.node.Node1D.D">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">D</span></code><a class="headerlink" href="#diffusion.node.Node1D.D" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.node.Node1D.G">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">G</span></code><a class="headerlink" href="#diffusion.node.Node1D.G" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.node.Node1D.get_Dhat">
+<code class="sig-name descname"><span class="pre">get_Dhat</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adjacent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.node.Node1D.get_Dhat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.node.Node1D.get_interior_equation">
+<code class="sig-name descname"><span class="pre">get_interior_equation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">left</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.node.Node1D.get_interior_equation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the matrix entries for a generic interior node</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> (<a class="reference internal" href="#diffusion.node.Node1D" title="diffusion.node.Node1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">diffusion.node.Node1D</span></code></a>) – The node at [i-1]</p></li>
+<li><p><strong>right</strong> (<a class="reference internal" href="#diffusion.node.Node1D" title="diffusion.node.Node1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">diffusion.node.Node1D</span></code></a>) – The node at [i+1]</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>a:  list of float</dt><dd><p>A-matrix entries at [i-1], [i], [i+1]</p>
+</dd>
+<dt>b:  float</dt><dd><p>B-matrix entry at [i]</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.node.Node1D.get_reflective_boundary_condition">
+<code class="sig-name descname"><span class="pre">get_reflective_boundary_condition</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adjacent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.node.Node1D.get_reflective_boundary_condition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the matrix entries for a reflective (zero-current) boundary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>adjacent</strong> (<a class="reference internal" href="#diffusion.node.Node1D" title="diffusion.node.Node1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">diffusion.node.Node1D</span></code></a>) – The node at [i+1] (if western boundary)
+or at [i-1] (if eastern boundary)</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple:</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>a: list of float</dt><dd><p>A-matrix entries at ([i-1] OR [i+1]), [i]</p>
+</dd>
+<dt>b: float</dt><dd><p>B-matrix entry at [i]</p>
+</dd>
+<dt>t:</dt><dd><p>T-matrix entry at [i]</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.node.Node1D.get_vacuum_boundary_equation">
+<code class="sig-name descname"><span class="pre">get_vacuum_boundary_equation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adjacent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.node.Node1D.get_vacuum_boundary_equation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the matrix entries for a vacuum (zero-incoming) boundary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>adjacent</strong> (<a class="reference internal" href="#diffusion.node.Node1D" title="diffusion.node.Node1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">diffusion.node.Node1D</span></code></a>) – <blockquote>
+<div><p>The node at [i+1] (if western boundary)</p>
+</div></blockquote>
+<p>or at [i-1] (if eastern boundary)</p>
+</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple:</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>a: list of float</dt><dd><p>A-matrix entries at ([i-1] OR [i+1]), [i]</p>
+</dd>
+<dt>b: float</dt><dd><p>B-matrix entry at [i]</p>
+</dd>
+<dt>t: float</dt><dd><p>T-matrix entry at [i]</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.node.Node1D.nuSigmaF">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">nuSigmaF</span></code><a class="headerlink" href="#diffusion.node.Node1D.nuSigmaF" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.node.Node1D.scatterMatrix">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">scatterMatrix</span></code><a class="headerlink" href="#diffusion.node.Node1D.scatterMatrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.node.Node1D.sigmaA">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">sigmaA</span></code><a class="headerlink" href="#diffusion.node.Node1D.sigmaA" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.node.Node1D.sigmaR">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">sigmaR</span></code><a class="headerlink" href="#diffusion.node.Node1D.sigmaR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.node.Node1D.sigmaS12">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">sigmaS12</span></code><a class="headerlink" href="#diffusion.node.Node1D.sigmaS12" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="diffusion.plotting.html" class="btn btn-neutral float-right" title="diffusion.plotting module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="diffusion.matrices.html" class="btn btn-neutral float-left" title="diffusion.matrices module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Travis J. Labossiere-Hickman.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

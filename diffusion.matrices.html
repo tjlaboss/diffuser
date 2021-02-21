@@ -1,0 +1,336 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>diffusion.matrices module &mdash; diffuser  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="diffusion.node module" href="diffusion.node.html" />
+    <link rel="prev" title="diffusion.material module" href="diffusion.material.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> diffuser
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">diffusion</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="diffusion.html">diffusion package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="diffusion.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="diffusion.analytic.html">diffusion.analytic module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diffusion.material.html">diffusion.material module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">diffusion.matrices module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diffusion.node.html">diffusion.node module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diffusion.plotting.html">diffusion.plotting module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diffusion.problem.html">diffusion.problem module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diffusion.solvers.html">diffusion.solvers module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="diffusion.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">diffuser</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">diffusion</a> &raquo;</li>
+        
+          <li><a href="diffusion.html">diffusion package</a> &raquo;</li>
+        
+      <li>diffusion.matrices module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/diffusion.matrices.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-diffusion.matrices">
+<span id="diffusion-matrices-module"></span><h1>diffusion.matrices module<a class="headerlink" href="#module-diffusion.matrices" title="Permalink to this headline">¶</a></h1>
+<p>Functions for dealing with the diffusion matrices</p>
+<dl class="py function">
+<dt id="diffusion.matrices.gauss_seidel">
+<code class="sig-prename descclassname"><span class="pre">diffusion.matrices.</span></code><code class="sig-name descname"><span class="pre">gauss_seidel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.matrices.gauss_seidel" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Gauss-Seidel iterative solver</p>
+<p>Theoretically, this is a more efficient solution
+because we only do math on the matrix elements that
+we know contain the right solution, and x is updated as we go.</p>
+<p>In practice, this is slower than scipy’S builtin matrix solution methods
+(including inversion) because they use C or Fortran libraries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>L</strong> (<em>np.ndarray</em><em>(</em><em>ndim=2</em><em>)</em>) – Lower-triangular square matrix, containing the diagonal</p></li>
+<li><p><strong>U</strong> (<em>np.ndarray</em><em>(</em><em>ndim=2</em><em>)</em>) – Upper-triangular square matrix, only off-diagnal terms</p></li>
+<li><p><strong>S</strong> (<em>np.ndarray</em><em>(</em><em>ndim=1</em><em>)</em>) – Source vector</p></li>
+<li><p><strong>x</strong> (<em>np.ndarray;</em>) – Flux vector of last iteration</p></li>
+<li><p><strong>k</strong> (<em>float</em>) – Eigenvalue from the last iteration</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Flux solution vector</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="diffusion.matrices.get_off_diagonal">
+<code class="sig-prename descclassname"><span class="pre">diffusion.matrices.</span></code><code class="sig-name descname"><span class="pre">get_off_diagonal</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.matrices.get_off_diagonal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return only the off-diagonal terms of a square matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>matrix</strong> (<em>np.ndarray</em><em>(</em><em>ndim=2</em><em>)</em>) – Square matrix</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray(ndim=2)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Copy of <a href="#id1"><span class="problematic" id="id2">`</span></a>matrix’ with the diagonal terms zeroed out.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="diffusion.matrices.l2norm_1d">
+<code class="sig-prename descclassname"><span class="pre">diffusion.matrices.</span></code><code class="sig-name descname"><span class="pre">l2norm_1d</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.matrices.l2norm_1d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compare the L2 engineering norms of two 1-dimensional arrays</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>new</strong> (<em>np.ndarray</em>) – Vector of the latest values</p></li>
+<li><p><strong>old</strong> (<em>np.ndarray</em>) – Vector of the reference values.
+Must be the same shape as <a href="#id3"><span class="problematic" id="id4">`</span></a>new’.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The L2 norm of the arrays</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="diffusion.matrices.populate_matrices">
+<code class="sig-prename descclassname"><span class="pre">diffusion.matrices.</span></code><code class="sig-name descname"><span class="pre">populate_matrices</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ngroups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc_left</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc_right</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.matrices.populate_matrices" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>node_list</strong> – list of <a class="reference internal" href="diffusion.node.html#diffusion.node.Node1D" title="diffusion.node.Node1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">diffusion.node.Node1D</span></code></a></p></li>
+<li><p><strong>node_list</strong> – List of nodes, from left to right.</p></li>
+<li><p><strong>ngroups</strong> – int</p></li>
+<li><p><strong>ngroups</strong> – Number of energy groups</p></li>
+<li><p><strong>bc_left</strong> (<em>str</em>) – Left (west) boundary condition.
+‘r’ for reflective, or ‘v’ for vacuum.</p></li>
+<li><p><strong>bc_right</strong> (<em>str</em>) – Right (east) boundary condition.
+‘r’ for reflective, or ‘v’ for vacuum.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><p>tuple:
+:returns:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>matrixA: np.ndarray</dt><dd><p>LHS Destruction matrix</p>
+</dd>
+<dt>matrixB: float</dt><dd><p>RHS Production matrix</p>
+</dd>
+</dl>
+</div></blockquote>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="diffusion.node.html" class="btn btn-neutral float-right" title="diffusion.node module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="diffusion.material.html" class="btn btn-neutral float-left" title="diffusion.material module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Travis J. Labossiere-Hickman.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

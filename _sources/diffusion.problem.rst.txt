@@ -1,0 +1,7 @@
+diffusion.problem module
+========================
+
+.. automodule:: diffusion.problem
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+diffusion.plotting module
+=========================
+
+.. automodule:: diffusion.plotting
+   :members:
+   :undoc-members:
+   :show-inheritance:

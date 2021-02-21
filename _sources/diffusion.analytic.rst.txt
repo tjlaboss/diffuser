@@ -1,0 +1,7 @@
+diffusion.analytic module
+=========================
+
+.. automodule:: diffusion.analytic
+   :members:
+   :undoc-members:
+   :show-inheritance:

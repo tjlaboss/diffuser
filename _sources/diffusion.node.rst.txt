@@ -1,0 +1,7 @@
+diffusion.node module
+=====================
+
+.. automodule:: diffusion.node
+   :members:
+   :undoc-members:
+   :show-inheritance:

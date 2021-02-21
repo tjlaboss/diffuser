@@ -1,0 +1,7 @@
+diffusion.material module
+=========================
+
+.. automodule:: diffusion.material
+   :members:
+   :undoc-members:
+   :show-inheritance:

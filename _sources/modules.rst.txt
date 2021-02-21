@@ -1,0 +1,7 @@
+diffusion
+=========
+
+.. toctree::
+   :maxdepth: 4
+
+   diffusion

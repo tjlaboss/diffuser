@@ -1,0 +1,351 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>diffusion.material module &mdash; diffuser  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="diffusion.matrices module" href="diffusion.matrices.html" />
+    <link rel="prev" title="diffusion.analytic module" href="diffusion.analytic.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> diffuser
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">diffusion</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="diffusion.html">diffusion package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="diffusion.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="diffusion.analytic.html">diffusion.analytic module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">diffusion.material module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diffusion.matrices.html">diffusion.matrices module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diffusion.node.html">diffusion.node module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diffusion.plotting.html">diffusion.plotting module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diffusion.problem.html">diffusion.problem module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diffusion.solvers.html">diffusion.solvers module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="diffusion.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">diffuser</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">diffusion</a> &raquo;</li>
+        
+          <li><a href="diffusion.html">diffusion package</a> &raquo;</li>
+        
+      <li>diffusion.material module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/diffusion.material.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-diffusion.material">
+<span id="diffusion-material-module"></span><h1>diffusion.material module<a class="headerlink" href="#module-diffusion.material" title="Permalink to this headline">¶</a></h1>
+<p>Material</p>
+<p>Module for multigroup diffusion material</p>
+<dl class="py class">
+<dt id="diffusion.material.Material">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">diffusion.material.</span></code><code class="sig-name descname"><span class="pre">Material</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ngroups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.material.Material" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A multigroup material for neutron diffusion</p>
+<p>Be sure to set all of the cross sections. You can check this by running
+<cite>Material.check_cross_sections()</cite>, which will raise an error if any
+are zero that cannot be. nuSigmaF is allowed to be zero.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ngroups</strong> (<em>int</em>) – number of energy groups to use</p></li>
+<li><p><strong>name</strong> (<em>str; optional</em>) – Name of the material</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#diffusion.material.Material.d" title="diffusion.material.Material.d"><strong>d</strong></a> (<em>np.ndarray</em><em>(</em><em>shape=</em><em>[</em><em>ngroups</em><em>, </em><em>1</em><em>]</em><em>, </em><em>dtype=float</em><em>)</em><em>, </em><em>cm</em>) – Diffusion coefficient</p></li>
+<li><p><a class="reference internal" href="#diffusion.material.Material.sigma_a" title="diffusion.material.Material.sigma_a"><strong>sigma_a</strong></a> (<em>np.ndarray</em><em>(</em><em>shape=</em><em>[</em><em>ngroups</em><em>, </em><em>1</em><em>]</em><em>, </em><em>dtype=float</em><em>)</em><em>, </em><em>cm^-1</em>) – Macroscopic absorption xs</p></li>
+<li><p><a class="reference internal" href="#diffusion.material.Material.nu_sigma_f" title="diffusion.material.Material.nu_sigma_f"><strong>nu_sigma_f</strong></a> (<em>np.ndarray</em><em>(</em><em>shape=</em><em>[</em><em>ngroups</em><em>, </em><em>1</em><em>]</em><em>, </em><em>dtype=float</em><em>)</em><em>, </em><em>cm^-1</em>) – Macroscopic nu-fission xs</p></li>
+<li><p><a class="reference internal" href="#diffusion.material.Material.scatter_matrix" title="diffusion.material.Material.scatter_matrix"><strong>scatter_matrix</strong></a> (<em>np.ndarray</em><em>(</em><em>shape=</em><em>[</em><em>ngroups</em><em>, </em><em>ngroups</em><em>]</em><em>, </em><em>dtype=float</em><em>)</em><em>, </em><em>cm^-1</em>) – Scattering matrix</p></li>
+<li><p><a class="reference internal" href="#diffusion.material.Material.is_fissionable" title="diffusion.material.Material.is_fissionable"><strong>is_fissionable</strong></a> (<em>bool</em>) – Whether there is any nu-fission cross section</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#diffusion.material.Material.sigma_s12" title="diffusion.material.Material.sigma_s12"><strong>sigma_s12</strong></a> (<em>float</em>) – Corrected downscatter cross section</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="diffusion.material.Material.check_cross_sections">
+<code class="sig-name descname"><span class="pre">check_cross_sections</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.material.Material.check_cross_sections" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.material.Material.d">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">d</span></code><a class="headerlink" href="#diffusion.material.Material.d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.material.Material.flux_ratio">
+<code class="sig-name descname"><span class="pre">flux_ratio</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bg2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.material.Material.flux_ratio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the fast-to-thermal flux ratio in a homogenous material</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bg2</strong> (<em>float; optional</em>) – geometric buckling
+[Default: 0.0]</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>fast-to-thermal flux ratio</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.material.Material.get_keff">
+<code class="sig-name descname"><span class="pre">get_keff</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bg2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.material.Material.get_keff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the eigenvalue in a homogeneous material</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bg2</strong> – Geometric buckling
+[Default: 0.0]</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The multiplication factor/eigenvalue</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.material.Material.get_kinf">
+<code class="sig-name descname"><span class="pre">get_kinf</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#diffusion.material.Material.get_kinf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper for get_keff() for an infinite medium</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.material.Material.is_fissionable">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">is_fissionable</span></code><a class="headerlink" href="#diffusion.material.Material.is_fissionable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.material.Material.nu_sigma_f">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">nu_sigma_f</span></code><a class="headerlink" href="#diffusion.material.Material.nu_sigma_f" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.material.Material.scatter_matrix">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">scatter_matrix</span></code><a class="headerlink" href="#diffusion.material.Material.scatter_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.material.Material.sigma_a">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">sigma_a</span></code><a class="headerlink" href="#diffusion.material.Material.sigma_a" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.material.Material.sigma_r">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">sigma_r</span></code><a class="headerlink" href="#diffusion.material.Material.sigma_r" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="diffusion.material.Material.sigma_s12">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">sigma_s12</span></code><a class="headerlink" href="#diffusion.material.Material.sigma_s12" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="diffusion.matrices.html" class="btn btn-neutral float-right" title="diffusion.matrices module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="diffusion.analytic.html" class="btn btn-neutral float-left" title="diffusion.analytic module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Travis J. Labossiere-Hickman.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

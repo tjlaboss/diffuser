@@ -1,0 +1,24 @@
+diffusion package
+=================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   diffusion.analytic
+   diffusion.material
+   diffusion.matrices
+   diffusion.node
+   diffusion.plotting
+   diffusion.problem
+   diffusion.solvers
+
+Module contents
+---------------
+
+.. automodule:: diffusion
+   :members:
+   :undoc-members:
+   :show-inheritance:

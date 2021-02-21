@@ -1,0 +1,7 @@
+diffusion.matrices module
+=========================
+
+.. automodule:: diffusion.matrices
+   :members:
+   :undoc-members:
+   :show-inheritance:
