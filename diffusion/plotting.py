@@ -1,13 +1,52 @@
-# Plotting
-#
-# Common plots
+"""
+Plotting
 
-from pylab import *
+Common plots
+"""
+
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 def flux_and_fission_plot(flux_vector, source_vector, node_list,
                           keff=None, peaking=None):
-	fig = figure()
+	"""Plot flux and fission source profiles
+	
+	Parameters:
+	-----------
+	:type flux_vector: np.ndarray(ndim=ngroups)
+	:param flux_vector:
+		Array of neutron flux.
+	
+	:type source_vector: np.ndarray(ndim=1)
+	:param source_vector:
+		Fission source vector.
+	
+	:type node_list: list of :class:`diffusion.node.Node1D`
+	:param node_list:
+		List of nodes with which the problem is filled
+	
+	:type keff: float; optional
+	:param keff:
+		Eigenvalue to optionally include on the plot.
+		[Default: None]
+	
+	:type peaking: float; optional
+	:param peaking:
+		Peaking factor to include on the plot.
+		If not provided, will use the nanmax of source_vector.
+
+	Returns:
+	--------
+	:rtype: tuple:
+	:returns:
+		fig: :class:`matplotlib.figure.Figure`
+			Flux vector
+		axes: tuple(len=2) of :class:`matplotlib.axes.Axes`
+			axes[0]: Flux plot
+			axes[1]: Fission source plot
+	"""
+	fig = plt.figure()
 	ax1 = fig.add_subplot(111)
 	nx = len(node_list)
 	xvals = np.cumsum([node.dx for node in node_list])
@@ -34,7 +73,7 @@ def flux_and_fission_plot(flux_vector, source_vector, node_list,
 	# Power distribution plot
 	ax2 = ax1.twinx()
 	if peaking is None:
-		peaking = nanmax(source_vector)
+		peaking = np.nanmax(source_vector)
 	lf = ax2.plot(xvals, source_vector, "-", color="gold", label="Fission Source")
 	lines += lf
 	labels = [l.get_label() for l in lines]
@@ -44,8 +83,7 @@ def flux_and_fission_plot(flux_vector, source_vector, node_list,
 		imax = np.nanargmax(source_vector[::-1])  # Get the last peak.
 		xplot = xvals[imax]
 		hwidth = xmax / 10.0
-		ax2.plot([xplot - hwidth, xplot + hwidth], [peaking, peaking],
-		         '-', color="gray")
+		ax2.plot([xplot - hwidth, xplot + hwidth], [peaking, peaking], '-', color="gray")
 		ptext = "peaking = {:5.4} @ {} cm".format(peaking, int(xplot))
 		ax2.text(xplot, peaking, ptext, ha="center", va="bottom")
 	if keff:
@@ -59,7 +97,29 @@ def flux_and_fission_plot(flux_vector, source_vector, node_list,
 
 
 def spy_plots(matA, matB):
-	fig = figure()
+	"""Solver using a Gauss-Seidel algorithm
+
+	Parameters:
+	-----------
+	:type matA: np.ndarray(ndim=2)
+	:param matA:
+		LHS Destruction matrix
+
+	:type matB: np.ndarray(ndim=2)
+	:param matB:
+		RHS Production matrix
+		
+	Returns:
+	--------
+	:rtype: tuple
+	:returns:
+		fig: :class:`matplotlib.figure.Figure`
+			Flux vector
+		axes: tuple(len=2) of :class:`matplotlib.axes.Axes`
+			axes[0]: A-matrix plot
+			axes[1]: B-matrix plot
+	"""
+	fig = plt.figure()
 	ax1 = fig.add_subplot(121)
 	ax1.spy(matA)
 	ax1.set_title("[A]\n", fontsize=12)
@@ -71,7 +131,24 @@ def spy_plots(matA, matB):
 
 
 def l2norm_plot(l2norm_vector):
-	fig = figure()
+	"""Plot the convergence of the L2 norm over iterations
+	
+	Parameters:
+	-----------
+	:type l2norm_vector: np.ndarray(ndim=1, dtype=float)
+	:param l2norm_vector:
+		Vector the L2 norm at each iteration
+	
+	Returns:
+	--------
+	:rtype: tuple
+	:returns:
+		fig: :class:`matplotlib.figure.Figure`
+			Flux vector
+		axes: tuple(len=1) of :class:`matplotlib.axes.Axes`
+			axes[0]: Flux plot
+	"""
+	fig = plt.figure()
 	ax = fig.add_subplot(111)
 	ax.semilogy(l2norm_vector)
 	ax.set_xlabel("Outer Iteration")

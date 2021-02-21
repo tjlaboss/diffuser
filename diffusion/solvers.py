@@ -1,11 +1,32 @@
-# Solvers
-#
-# Module containing the numerical solution to the eigenvalue problem.
-# Three different solvers are provided, each solving the matrix equation
-# [A]x = 1/k*[B]x  with a different method.
+r"""
+Solvers
 
+Module containing the numerical solution to the eigenvalue problem.
+Three different solvers are provided, each solving the following
+matrix equation with a different method.
 
-import scipy
+.. math::
+
+	[A] \vec{x} = \frac{1}{k} [B] \vec{x}
+
+.. data:: MAX_INNER
+
+	Default limit of inner (flux) iterations
+
+.. data:: MAX_OUTER
+
+	Default limit of outer (fission source) iterations
+
+.. data:: EPS_INNER
+
+	Default numerical tolerance for inner (flux) convergence
+
+.. data:: EPS_OUTER
+
+	Default numerical tolerance for outer (fission source) convergence
+"""
+
+import numpy as np
 import scipy.linalg as la
 from .matrices import gauss_seidel, l2norm_1d
 
@@ -20,19 +41,60 @@ class ConvergenceError(BaseException):
 
 
 class BaseSolver:
+	"""Base class for diffusion numerical solvers
+	
+	Parameters:
+	-----------
+	:type matA: np.ndarray(ndim=2)
+	:param matA:
+		LHS Destruction matrix
+	
+	:type matB: np.ndarray(ndim=2)
+	:param matB:
+		RHS Production matrix
+	
+	:type xguess: np.ndarray(ndim=1); optional
+	:param xguess:
+		Initial guess for the flux vector.
+	
+	:type eps_flux: float; optional
+	:param eps_flux:
+		Numerical tolerance for the inner (flux) convergence.
+		[Default: :const:`diffusion.solvers.EPS_INNER`]
+	
+	:type eps_source: float; optional
+	:param eps_source:
+		Numerical tolerance for the outer (fission source) convergence.
+		[Default: :const:`diffusion.solvers.EPS_OUTER`]
+	
+	:type eps_k: float; optional
+	:param eps_k:
+		Numerical tolerance for eigenvalue convergence.
+		[Default: :const:`diffusion.solvers.EPS_OUTER`]
+	"""
 	def __init__(self, matA, matB, xguess=None,
 	             eps_flux=EPS_INNER, eps_source=EPS_OUTER, eps_k=EPS_OUTER):
 		if xguess is None:
-			xguess = scipy.ones(len(matA))
+			xguess = np.ones(len(matA))
 		self.xguess = xguess
 		self.eps_flux = eps_flux
 		self.eps_source = eps_source
 		self.eps_k = eps_k
 		self.matB = matB
 		self._solved = False
-		self._l2norm = scipy.zeros(MAX_OUTER)
+		self._l2norm = np.zeros(MAX_OUTER)
 	
 	def get_l2norm_results(self):
+		"""Get the L2norm of the solution at every outer iteration
+		
+		Raises a ValueError if the solver has not run yet.
+		
+		Returns:
+		--------
+		:rtype: np.ndarray(ndim=1, dtype=float)
+		:returns:
+			L2norm of the numerical solution
+		"""
 		if self._solved:
 			return self._l2norm
 		else:
@@ -51,31 +113,44 @@ class BaseSolver:
 		
 		Parameters:
 		-----------
-		fuel:       Material with the cross sections to use for the guess
-		nx:         int; number of spatial nodes
-		bc_left:    str; LHS boundary condition. in {'v' or 'r'}
-		bc_right:   str; RHS boundary condition. in {'v' or 'r'}
+		:type fuel: :class:`diffusion.material.Material`
+		:param fuel:
+			Material with the cross sections to use for the guess
+		
+		:type nx: int
+		:param nx:
+			Number of spatial nodes
+		
+		:type bc_left: str
+		:param bc_left:
+			LHS boundary condition. in {'v' or 'r'}
+		
+		:type bc_right: str
+		:param bc_right:
+			RHS boundary condition. in {'v' or 'r'}
 		
 		Returns:
 		--------
-		flux:       array(shape=nx, dtype=float)
+		:rtype: np.ndarray(shape=nx, dtype=float)
+		:returns:
+			Guess for the flux vector
 		"""
 		assert fuel.is_fissionable, \
 			"Cannot guess flux: No nu_fission cross section!"
 		for bc in (bc_left, bc_right):
 			assert bc in ('r', 'v'), \
 				"Unknown boundary condition: {}".format(bc)
-		fshape = scipy.ones(nx)
-		cx = scipy.pi/nx
+		fshape = np.ones(nx)
+		cx = np.pi/nx
 		if bc_left == 'v' and bc_right == 'v':
 			# Cosine
-			f = lambda i: scipy.cos(cx*(i - nx/2))
+			f = lambda i: np.cos(cx*(i - nx/2))
 		elif bc_left == 'r' and bc_right == 'v':
 			# Half-cosine
-			f = lambda i: scipy.cos(cx*i)
+			f = lambda i: np.cos(cx*i)
 		elif bc_left == 'v' and bc_right == 'r':
 			# Half-cosine, the other way
-			f = lambda i: scipy.cos(cx*(nx - i))
+			f = lambda i: np.cos(cx*(nx - i))
 		elif bc_left == 'r' and bc_right == 'r':
 			# Flat
 			f = lambda i: i
@@ -85,34 +160,39 @@ class BaseSolver:
 		if fuel.ngroups == 1:
 			flux = fshape
 		else:
-			flux = scipy.zeros(fuel.ngroups*nx)
+			flux = np.zeros(fuel.ngroups*nx)
 			flux[:nx] = fshape
 			flux[nx:] = fshape*fuel.flux_ratio()
 		self.xguess = flux
 		return flux
 	
-	
 	def _solve_x(self, x, s, k):
 		pass
-	
 	
 	def solve_eigenvalue(self, kguess):
 		"""Iterate to solve for the eigenvalue and eigenvector
 		
 		Parameter:
 		----------
-		kguess:         float; guess for the eigenvalue
+		:type kguess: float
+		:param kguess:
+			Guess for the eigenvalue
 		
 		Returns:
 		--------
-		x:              array; eigenvector
-		s:              array; fission source vector
-		k:              float; eigenvalue
+		:rtype: tuple:
+		:returns:
+			x: np.ndarray
+				Flux vector
+			s: np.ndarray
+				Fission source vector
+			k: float
+				Eigenvalue
 		"""
 		if not kguess:
 			kguess = 1.0
 		sguess = self.matB.dot(self.xguess)
-		oldx = scipy.array(self.xguess)
+		oldx = np.array(self.xguess)
 		kdiff = 1 + self.eps_k
 		sdiff = 1 + self.eps_source
 		c_outer = 0
@@ -153,24 +233,38 @@ class BaseSolver:
 
 
 class InversionSolver(BaseSolver):
-	"""Flux and eigenvalue solver using matrix inversion
+	"""Solver using matrix inversion
 	
-	Required Parameters:
-	--------------------
-	matA:           array; the destruction matrix
-	matB:           array; the fission matrix
 	
-	Optional Parameters:
-	--------------------
-	xguess:         array; guess for the flux vector.
-	                Will be overwritten by InversionSolver.guess_flux().
-	                [Default: None]
-	eps_flux:       float; tolerance on the inner (flux) l2 norm
-	                [Default: 1E-7]
-	eps_source:     float; tolerance on the outer (fission source) l2 norm
-	                [Default: 1E-5]
-	eps_k:          float; tolerance on the eigenvalue (k) l2 norm
-	                [Default: 1E-5]
+	Parameters:
+	-----------
+	:type matA: np.ndarray(ndim=2)
+	:param matA:
+		LHS Destruction matrix.
+		Caution: inverted upon instantiation.
+	
+	:type matB: np.ndarray(ndim=2)
+	:param matB:
+		RHS Production matrix
+	
+	:type xguess: np.ndarray(ndim=1); optional
+	:param xguess:
+		Initial guess for the flux vector.
+	
+	:type eps_flux: float; optional
+	:param eps_flux:
+		Numerical tolerance for the inner (flux) convergence.
+		[Default: :const:`diffusion.solvers.EPS_INNER`]
+	
+	:type eps_source: float; optional
+	:param eps_source:
+		Numerical tolerance for the outer (fission source) convergence.
+		[Default: :const:`diffusion.solvers.EPS_OUTER`]
+	
+	:type eps_k: float; optional
+	:param eps_k:
+		Numerical tolerance for eigenvalue convergence.
+		[Default: :const:`diffusion.solvers.EPS_OUTER`]
 	"""
 	def __init__(self, matA, matB, xguess=None,
 	             eps_flux=EPS_INNER, eps_source=EPS_OUTER, eps_k=EPS_OUTER):
@@ -185,24 +279,36 @@ class InversionSolver(BaseSolver):
 
 
 class ScipySolver(BaseSolver):
-	"""Flux and eigenvalue solver using scipy.linalg
-
-	Required Parameters:
-	--------------------
-	matA:           array; the destruction matrix
-	matB:           array; the fission matrix
-
-	Optional Parameters:
-	--------------------
-	xguess:         array; guess for the flux vector.
-	                Will be overwritten by ScipySolver.guess_flux().
-	                [Default: None]
-	eps_flux:       float; tolerance on the inner (flux) l2 norm
-	                [Default: 1E-7]
-	eps_source:     float; tolerance on the outer (fission source) l2 norm
-	                [Default: 1E-5]
-	eps_k:          float; tolerance on the eigenvalue (k) l2 norm
-	                [Default: 1E-5]
+	"""Solver using Scipy's linalg.solve
+	
+	Parameters:
+	-----------
+	:type matA: np.ndarray(ndim=2)
+	:param matA:
+		LHS Destruction matrix
+	
+	:type matB: np.ndarray(ndim=2)
+	:param matB:
+		RHS Production matrix
+	
+	:type xguess: np.ndarray(ndim=1); optional
+	:param xguess:
+		Initial guess for the flux vector.
+	
+	:type eps_flux: float; optional
+	:param eps_flux:
+		Numerical tolerance for the inner (flux) convergence.
+		[Default: :const:`diffusion.solvers.EPS_INNER`]
+	
+	:type eps_source: float; optional
+	:param eps_source:
+		Numerical tolerance for the outer (fission source) convergence.
+		[Default: :const:`diffusion.solvers.EPS_OUTER`]
+	
+	:type eps_k: float; optional
+	:param eps_k:
+		Numerical tolerance for eigenvalue convergence.
+		[Default: :const:`diffusion.solvers.EPS_OUTER`]
 	"""
 	def __init__(self, matA, matB, xguess=None,
 	             eps_flux=EPS_INNER, eps_source=EPS_OUTER, eps_k=EPS_OUTER):
@@ -215,30 +321,42 @@ class ScipySolver(BaseSolver):
 
 
 class GaussSeidelSolver(BaseSolver):
-	"""Flux and eigenvalue solver using a custom Gauss-Seidel solver
-
-	Required Parameters:
-	--------------------
-	matA:           array; the destruction matrix
-	matB:           array; the fission matrix
-
-	Optional Parameters:
-	--------------------
-	xguess:         array; guess for the flux vector.
-	                Will be overwritten by GaussSeidelSolver.guess_flux().
-	                [Default: None]
-	eps_flux:       float; tolerance on the inner (flux) l2 norm
-	                [Default: 1E-7]
-	eps_source:     float; tolerance on the outer (fission source) l2 norm
-	                [Default: 1E-5]
-	eps_k:          float; tolerance on the eigenvalue (k) l2 norm
-	                [Default: 1E-5]
+	"""Solver using a Gauss-Seidel algorithm
+	
+	Parameters:
+	-----------
+	:type matA: np.ndarray(ndim=2)
+	:param matA:
+		LHS Destruction matrix
+	
+	:type matB: np.ndarray(ndim=2)
+	:param matB:
+		RHS Production matrix
+	
+	:type xguess: np.ndarray(ndim=1); optional
+	:param xguess:
+		Initial guess for the flux vector.
+	
+	:type eps_flux: float; optional
+	:param eps_flux:
+		Numerical tolerance for the inner (flux) convergence.
+		[Default: :const:`diffusion.solvers.EPS_INNER`]
+	
+	:type eps_source: float; optional
+	:param eps_source:
+		Numerical tolerance for the outer (fission source) convergence.
+		[Default: :const:`diffusion.solvers.EPS_OUTER`]
+	
+	:type eps_k: float; optional
+	:param eps_k:
+		Numerical tolerance for eigenvalue convergence.
+		[Default: :const:`diffusion.solvers.EPS_OUTER`]
 	"""
 	def __init__(self, matA, matB, xguess=None,
 	             eps_flux=EPS_INNER, eps_source=EPS_OUTER, eps_k=EPS_OUTER):
 		super().__init__(
 			matA, matB, xguess, eps_flux, eps_source, eps_k)
-		self.matL = scipy.tril(matA)
+		self.matL = np.tril(matA)
 		self.matU = matA - self.matL
 		del matA
 	

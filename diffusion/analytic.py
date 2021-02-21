@@ -1,11 +1,51 @@
-# Analytic
-#
-# Analytic solutions to homogeneous problems
+"""
+Analytic
 
-import scipy
+Analytic solutions to homogeneous problems
+"""
+
+import numpy as np
 from scipy.integrate import quad
 
-class AnalyticProblem1D(object):
+
+class AnalyticProblem1D:
+	"""Base class for analytic solutions to homogeneous 1D problems
+	
+	Parameters:
+	-----------
+	:type fill: :class:`diffusion.material.Material`
+	:param fill:
+		Material the medium is filled with
+	
+	:type width: float, cm
+	:param width:
+		Width or diameter of the medium
+		[Default: None]
+	
+	Attributes:
+	-----------
+	:vartype bg2: float
+	:ivar bg2:
+		Geometric buckling (exactly 0 if infinite)
+	
+	:vartype ngroups: int
+	:ivar ngroups:
+		Number of energy groups
+
+	:vartype mag1: float
+	:ivar mag1:
+		Relative magnitude of fast flux.
+		Only present if `ngroups' is 2.
+	
+	:vartype mag2: float
+	:ivar mag2:
+		Relative magnitude of thermal flux.
+		Only present if `ngroups' is 2.
+	
+	:vartype ratio: float
+	:ivar ratio:
+		Ratio of mag1/mag2.
+	"""
 	def __init__(self, fill, width=None):
 		self.fill = fill
 		self.ngroups = fill.ngroups
@@ -42,6 +82,25 @@ class AnalyticProblem1D(object):
 		return self.fill.get_keff(bg2)
 	
 	def flux(self, coord, g=None):
+		"""Get the flux at a points
+
+		Parameters:
+		-----------
+		:type coord: float, cm
+		:param coord:
+			Point to calculate the flux at
+		
+		:type g: int
+		:param g:
+			Energy group index.
+			Must be provided if ngroups > 1.
+
+		Returns:
+		--------
+		:rtype: np.ndarray
+		:returns:
+			Array of flux values at every point in `coordvec'.
+		"""
 		self._assert_g(g)
 		if self.width is None:
 			if g is None or self.ngroups == 1:
@@ -57,18 +116,73 @@ class AnalyticProblem1D(object):
 				self._invalid_ngroups(self.ngroups)
 	
 	def fission_source(self, coord):
+		"""Calculate the fission source at a point
+		
+		Parameter:
+		----------
+		:type coord: float, cm
+		:param coord:
+			Coordinate to calculate the fission source at.
+
+		Returns:
+		--------
+		:rtype: float
+		:returns:
+			Fission source at position `coord'
+		"""
 		fs = 0.0
 		for g in range(self.ngroups):
 			fs += self.flux(coord, g)*self.fill.nu_sigma_f[g]
 		return fs
 	
 	def get_flux_vector(self, coordvec, g=None):
-		return scipy.array([self.flux(x, g) for x in coordvec])
+		"""Get the flux vector at several points
+		
+		Parameters:
+		-----------
+		:type coordvec: list of float, cm
+		:param coordvec:
+			List of points to calculate the flux at
+		
+		:type g: int; optional
+		:param g:
+			Energy group index.
+			Must be provided if ngroups > 1.
+		
+		Returns:
+		--------
+		:rtype: np.ndarray
+		:returns:
+			Array of flux values at every point in `coordvec'.
+		"""
+		return np.array([self.flux(x, g) for x in coordvec])
 	
 	def get_fission_source_vector(self, coordvec):
-		return scipy.array([self.fission_source(x) for x in coordvec])
+		"""Calculate the fission source vector at several points
+	
+		Parameter:
+		----------
+		:type coordvec: list of float, cm
+		:param coordvec:
+			List of points to calculate the flux at
+
+		Returns:
+		--------
+		:rtype: np.ndarray
+		:returns:
+			Array of fission source values at every point in `coordvec'.
+		"""
+		return np.array([self.fission_source(x) for x in coordvec])
 	
 	def get_peaking_factor(self):
+		"""Calculate the analytic peaking factor
+		
+		Returns:
+		--------
+		:rtype: float
+		:returns:
+			Peaking factor over the slab
+		"""
 		if self.width is None:
 			return 1
 		peak = self.fission_source(0)
@@ -77,48 +191,46 @@ class AnalyticProblem1D(object):
 
 
 class AnalyticSlab1D(AnalyticProblem1D):
-	"""A one-dimensional Cartesian slab with a homogeneous medium
-	
-	Parameters:
-	-----------
-	fill:       Material; the homogeneous medium
-	width:      float, cm, optional; the slab width.
-	            Leave it as `None` for an infinite slab.
-	            [Default: None]
-	
-	Attributes:
-	-----------
-	bg2:        float; geometric buckling (exactly 0 if infinite)
-	ngroups:    int; number of energy groups
-	if ngroups == 2:
-		mag1:   float; relative magnitude of fast flux
-		mag2:   float; relative magnitude of thermal flux
-		ratio:  float; ratio of mag1/mag2
-	"""
+	"""A one-dimensional Cartesian slab with a homogeneous medium"""
 	def geometric_buckling(self):
+		"""Analytic geometric buckling in a Cartesian slab
+		
+		Returns:
+		--------
+		:rtype: float, cm^-2
+		:returns:
+			Geometric buckling
+		"""
 		if self.width is None:
 			# infinite
 			return 0.0
-		return (scipy.pi/self.width)**2
+		return (np.pi/self.width)**2
 	
 	def flux(self, x, g=None):
 		"""Find the groupwise scalar flux somewhere on the slab
 		
 		Parameters:
 		-----------
-		x:          float, cm; x-coordinate to find the flux at
-		g:          int, optional for 1-group; which energy group's flux
+		:type x: float, cm
+		:param x:
+			X-coordinate to find the flux at
+		
+		:type g: int, optional for 1-group
+		:param g:
+			Which energy group's flux
 		
 		Returns:
 		--------
-		float; normalized scalar flux at x
+		:rtype: float
+		:returns:
+			normalized scalar flux at x
 		"""
 		res = super().flux(x, g)
 		if res is not None:
 			return res
 		# otherwise, it's finite
 		extrap1 = 4*self.fill.d[0]
-		flux1 = scipy.cos(scipy.pi*x/(self.width + extrap1))
+		flux1 = np.cos(np.pi*x/(self.width + extrap1))
 		if self.ngroups == 1:
 			return flux1
 		elif self.ngroups == 2:
@@ -126,7 +238,7 @@ class AnalyticSlab1D(AnalyticProblem1D):
 				return self.mag1*flux1
 			elif g == 1:
 				extrap2 = 4*self.fill.d[1]
-				return self.mag2*scipy.cos(scipy.pi*x/(self.width + extrap2))
+				return self.mag2*np.cos(np.pi*x/(self.width + extrap2))
 			else:
 				self._invalid_group(g)
 		else:

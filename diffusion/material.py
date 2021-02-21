@@ -1,12 +1,15 @@
-# Material
-#
-# Class for multigroup diffusion material
+"""
+Material
 
-import scipy
+Module for multigroup diffusion material
+"""
+
+import numpy as np
+from textwrap import dedent
 from .matrices import get_off_diagonal
 
 
-class Material(object):
+class Material:
 	"""A multigroup material for neutron diffusion 
 	
 	Be sure to set all of the cross sections. You can check this by running
@@ -15,39 +18,61 @@ class Material(object):
 	
 	Parameters:
 	-----------
-	ngroups:        int; number of energy groups to use
-	name:           str, optional
+	:type ngroups: int
+	:param ngroups:
+		number of energy groups to use
+	
+	:type name: str; optional
+	:param name:
+		Name of the material
+	
 	
 	Attributes:
 	-----------
-	d:              array(ngroups,1), float, cm; diffusion coefficient
-	sigma_a:        array(ngroups,1), float, cm^-1; macroscopic absorption xs
-	nu_sigma_f:     array(ngroups,1), float, cm^-1; macroscopic nu-fission xs
-	scatter_matrix: array(ngroups,ngroups), float, cm^-1; scattering matrix
-	is_fissionable: Boolean; whether there is any nu-fission cross section
+	:vartype d: np.ndarray(shape=[ngroups, 1], dtype=float), cm
+	:ivar d:
+		Diffusion coefficient
+	
+	:vartype sigma_a: np.ndarray(shape=[ngroups, 1], dtype=float), cm^-1
+	:ivar sigma_a:
+		Macroscopic absorption xs
+	
+	:vartype nu_sigma_f: np.ndarray(shape=[ngroups, 1], dtype=float), cm^-1
+	:ivar nu_sigma_f:
+		Macroscopic nu-fission xs
+	
+	:vartype scatter_matrix: np.ndarray(shape=[ngroups, ngroups], dtype=float), cm^-1
+	:ivar scatter_matrix:
+		Scattering matrix
+	
+	:vartype is_fissionable: bool
+	:ivar is_fissionable:
+		Whether there is any nu-fission cross section
 	
 	Only in 2-group:
 	----------------
-	sigma_s12:      float; corrected downscatter cross section
+	:vartype sigma_s12: float
+	:ivar sigma_s12:
+		Corrected downscatter cross section
 	"""
 	def __init__(self, ngroups, name=""):
 		self.ngroups = ngroups
 		self.name = name
 
-		self._d = scipy.zeros(ngroups)
-		self._sigma_a = scipy.zeros(ngroups)
-		self._sigma_r = scipy.zeros(ngroups)
-		self._scatter_matrix = scipy.zeros((ngroups, ngroups))
-		self._nu_sigma_f = scipy.zeros(ngroups)
+		self._d = np.zeros(ngroups)
+		self._sigma_a = np.zeros(ngroups)
+		self._sigma_r = np.zeros(ngroups)
+		self._scatter_matrix = np.zeros((ngroups, ngroups))
+		self._nu_sigma_f = np.zeros(ngroups)
 
 		self._is_fissionable = False
 		self._sigma_s12 = None
 
 	def __str__(self):
-		rep = """\
-Material: {}
-  - {} groups
-  - Fissionable: {}""".format(self.name, self.ngroups, self.is_fissionable)
+		rep = dedent("""Material: {}
+		                  - {} groups
+		                  - Fissionable: {}"""
+		             ).format(self.name, self.ngroups, self.is_fissionable)
 		return rep
 
 	@property
@@ -123,12 +148,16 @@ Material: {}
 		
 		Parameter:
 		----------
-		bg2:        float, optional; geometric buckling
-					[Default: 0.0]
+		:type bg2: float; optional
+		:param bg2:
+			geometric buckling
+			[Default: 0.0]
 		
 		Returns:
 		--------
-		float; fast-to-thermal flux ratio
+		:rtype: float
+		:returns:
+			fast-to-thermal flux ratio
 		"""
 		assert self.ngroups == 2
 		return (self.d[1]*bg2 + self.sigma_a[1])/self.sigma_s12
@@ -138,25 +167,29 @@ Material: {}
 		return self.get_keff(bg2=0.0)
 
 	def get_keff(self, bg2):
-		"""Find the eigenvalue in a homogenous material
+		"""Find the eigenvalue in a homogeneous material
 
 		Parameter:
 		----------
-		bg2:        float, optional; geometric buckling
-					[Default: 0.0]
+		:vartype bg2: float; optional
+		:param bg2:
+			Geometric buckling
+			[Default: 0.0]
 
 		Returns:
 		--------
-		keff:       float; the multiplication factor/eigenvalue
+		:rtype: float
+		:returns:
+			The multiplication factor/eigenvalue
 		"""
 		if not self.is_fissionable:
 			return 0.0
 		elif self.ngroups == 1:
-			return scipy.float64(self.nu_sigma_f/(self.sigma_a + self.d*bg2))
+			return np.float64(self.nu_sigma_f/(self.sigma_a + self.d*bg2))
 		elif self.ngroups == 2:
 			ratio = self.flux_ratio(bg2)
 			r1 = self.sigma_a[0] + self.sigma_s12
-			return (self.nu_sigma_f[0] + self.nu_sigma_f[1]/ratio)/ \
+			return (self.nu_sigma_f[0] + self.nu_sigma_f[1]/ratio) / \
 			       (self.d[0]*bg2 + r1)
 		else:
 			errstr = "k_inf calculation is only available for 1 or 2 groups."

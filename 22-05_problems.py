@@ -2,11 +2,13 @@
 #
 # 22.05/PSet07: Numerical Diffusion Theory Analysis
 
+import multiprocessing as mp
+import numpy as np
 import diffusion
 import materials
 
 
-problems = [None]*10
+problems = np.empty(10, dtype=diffusion.Problem1D)
 # Problem 0: Infinite homogeneous medium
 problems[0] = diffusion.Problem1D(2, fuel=materials.fuel_016)
 problems[0].add_east_bc("r")
@@ -92,11 +94,35 @@ problems[9].add_region(materials.fuel_031, 18, 18)
 problems[9].add_region(materials.baffle, 2, 2)
 problems[9].add_region(materials.refl, 23, 23)
 
-# Run ALL the problems
-for i, prob in enumerate(problems):
-	if i == 1:
-		# Show advanced plots for one of the problems
-		prob.run(diffusion.ScipySolver, plot_level=3)
-	else:
-		prob.run(diffusion.ScipySolver, plot_level=1)
-diffusion.plotting.show()
+
+def headless():
+	processes = []
+	# Run ALL the problems
+	for i, prob in enumerate(problems):
+		if i == 1:
+			run_kwargs = {"SolverClass": diffusion.ScipySolver,
+			              "plot_level" : 0}
+			proc = mp.Process(target=prob.run, kwargs=run_kwargs)
+		else:
+			run_kwargs = {"SolverClass": diffusion.ScipySolver,
+			              "plot_level" : 0}
+			proc = mp.Process(target=prob.run, kwargs=run_kwargs)
+		processes.append(proc)
+	for proc in processes:
+		proc.start()
+	for proc in processes:
+		proc.join()
+
+
+def interactive():
+	for i, prob in enumerate(problems):
+		if i == 1:
+			# Show advanced plots for one of the problems
+			prob.run(diffusion.ScipySolver, plot_level=3)
+		else:
+			prob.run(diffusion.ScipySolver, plot_level=1)
+	diffusion.plotting.show()
+
+
+if __name__ == "__main__":
+	interactive()
